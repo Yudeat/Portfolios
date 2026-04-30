@@ -1,0 +1,27 @@
+# Portfolio Senior Advisor Rules: Performance & Storytelling
+
+## 1. PERFORMANCE ARCHITECTURE (The "Beast" Layer)
+
+- **Zero-Layout Shift:** Always use `aspect-ratio` or fixed placeholders for animated elements and images to prevent CLS (Cumulative Layout Shift).
+- **Client-Side Hygiene:** Every GSAP animation MUST use the `@gsap/react` `useGSAP()` hook for automatic memory cleanup. Manual `gsap.kill()` is forbidden unless within a custom cleanup.
+- **Render Optimization:** Use `will-change: transform` exclusively on elements that animate position/scale. Avoid animating layout-heavy properties (e.g., `height`, `margin`, `top`, `left`). Use `x`, `y`, `scale`, and `rotation` instead.
+- **Image Strategy:** Use Next.js `<Image />` with `priority` for Hero assets. For GSAP-triggered images, use `loading="eager"` for the next 2 sections in the scroll-map to prevent "stutter-loading."
+- **Font Loading:** Use `next/font` with `display: swap` to ensure text is readable before the high-end variable fonts load.
+
+## 2. MODERN COMPONENT STANDARDS
+
+- **App Router First:** Use Server Components by default. Label `'use client'` only at the leaf nodes (e.g., specific animation wrappers like `HeroClient.tsx`).
+- **Functional Cleanliness:** Use TypeScript interfaces for all props. Avoid `React.FC`. Prefer `const Component = ({ prop }: Props) => ...`.
+- **GSAP Scoping:** Always use the `scope` property in `useGSAP({ scope: containerRef })` to prevent selector collisions across the DOM.
+
+## 3. STORYTELLING & UX ORCHESTRATION
+
+- **The "Contextual Reveal":** When creating sections, implement a "narrative focus" logic. As a section enters the viewport, dim or blur the previous section to guide the user's eye (The "Lens" effect).
+- **Responsive Pacing:** Animations on mobile must be 30% faster than on desktop. Use `gsap.matchMedia()` to disable "Horizontal Scroll" sections on screens < 768px.
+- **Micro-Interactions:** Buttons must have a "Magnetic" GSAP effect. Use a custom `CursorContext` to manage the cursor state (e.g., switching to 'view' or 'drag' labels based on the hovered component).
+- **Semantic Motion:** All `SplitText` animations must maintain accessibility. Use `aria-label` on the parent container and `aria-hidden="true"` on the split characters/lines.
+
+## 4. ERROR HANDLING & LOGGING
+
+- **Fail Gracefully:** If GSAP fails to load or a ref is null, the content must be visible by default (CSS-first visibility).
+- **Console Warnings:** In development, log the trigger points for ScrollTriggers to verify orchestration is correct.
