@@ -2,7 +2,7 @@ import { LensHeading } from "@/components/ui/LensHeading";
 
 export function Philosophy() {
   return (
-    <section className="px-6 py-[24vh] sm:px-10 lg:px-16">
+    <section className="px-4 py-[max(10vh,4rem)] sm:px-10 sm:py-[18vh] md:py-[24vh] lg:px-16">
       <p className="text-xs uppercase tracking-[0.16em] text-[#3f7cff]">Philosophy</p>
       <LensHeading
         text="Product Thinking with Lens-Focused Clarity."

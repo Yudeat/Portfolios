@@ -11,6 +11,7 @@ body {
   background: var(--bg);
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
   text-rendering: geometricPrecision;
+  overflow-x: clip;
 }
 
 @layer utilities {

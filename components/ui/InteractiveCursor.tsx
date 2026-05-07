@@ -10,7 +10,9 @@ export function InteractiveCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
-    if (!cursorRef.current || window.matchMedia("(pointer: coarse)").matches) return;
+    if (!cursorRef.current || window.matchMedia("(pointer: coarse)").matches) {
+      return;
+    }
 
     const cursor = cursorRef.current;
     const moveX = gsap.quickTo(cursor, "x", { duration: 0.22, ease: "power3.out" });

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { ActiveSectionProvider } from "@/components/providers/ActiveSectionProvider";
+import { NavMenuProvider } from "@/components/providers/NavMenuProvider";
 import { SmoothScrollProvider } from "@/components/providers/SmoothScrollProvider";
 import { InteractiveCursor } from "@/components/ui/InteractiveCursor";
 
@@ -22,8 +24,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} bg-[#050505] font-sans text-white antialiased`}>
-        <SmoothScrollProvider>{children}</SmoothScrollProvider>
+      <body className={`${inter.variable} min-w-0 overflow-x-clip bg-[#050505] font-sans text-white antialiased`}>
+        <SmoothScrollProvider>
+          <ActiveSectionProvider>
+            <NavMenuProvider>{children}</NavMenuProvider>
+          </ActiveSectionProvider>
+        </SmoothScrollProvider>
         <InteractiveCursor />
       </body>
     </html>
