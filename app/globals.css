@@ -18,6 +18,26 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+
+  .font-hero-serif {
+    font-family: var(--font-serif-hero), ui-serif, Georgia, "Times New Roman", serif;
+  }
+
+  .animate-hero-scroll-hint-bounce {
+    animation: hero-scroll-hint-bounce 1.5s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    will-change: transform;
+  }
+}
+
+@keyframes hero-scroll-hint-bounce {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(0, 10px, 0);
+  }
 }
 
 .hero-char-mask {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef } from "react";
+import { useEffect, useId, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import Link from "next/link";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -37,16 +37,28 @@ export function SplitScreenNav({
   const backdropRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLElement>(null);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
+  const menuToggleRef = useRef<HTMLButtonElement>(null);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
   const initializedRef = useRef(false);
   const lenisRef = useRef(lenis);
+  const wasMenuOpenRef = useRef(false);
 
   useEffect(() => {
     lenisRef.current = lenis;
   }, [lenis]);
 
-  useEffect(() => {
-    if (isOpen) closeBtnRef.current?.focus({ preventScroll: true });
+  /** Open: focus close control. Closing: yield focus back to Menu so nothing stays focused inside `aria-hidden`. */
+  useLayoutEffect(() => {
+    const wasOpen = wasMenuOpenRef.current;
+    wasMenuOpenRef.current = isOpen;
+
+    if (isOpen) {
+      closeBtnRef.current?.focus({ preventScroll: true });
+      return;
+    }
+    if (wasOpen) {
+      menuToggleRef.current?.focus({ preventScroll: true });
+    }
   }, [isOpen]);
 
   /** Unmount-only: do not tie to [lenis] — lenis identity changes would wrongly re-enable ST while menu is open. */
@@ -138,6 +150,7 @@ export function SplitScreenNav({
   return (
     <div className="pointer-events-none fixed inset-0 z-[8500] min-w-0">
       <button
+        ref={menuToggleRef}
         type="button"
         onClick={onOpen}
         className="pointer-events-auto fixed right-[max(1rem,env(safe-area-inset-right))] top-[max(1rem,env(safe-area-inset-top))] z-[1] text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-white/72 transition-colors hover:text-white sm:right-8 sm:top-4 sm:text-[0.72rem] sm:tracking-[0.22em] md:right-28 lg:right-36 xl:right-40"
@@ -147,7 +160,6 @@ export function SplitScreenNav({
 
       <div
         className={`absolute inset-0 min-h-0 min-w-0 ${isOpen ? "pointer-events-auto" : "pointer-events-none"}`}
-        aria-hidden={!isOpen}
       >
         <button
           ref={backdropRef}
@@ -163,7 +175,7 @@ export function SplitScreenNav({
           role="dialog"
           aria-modal="true"
           aria-labelledby={titleId}
-          aria-hidden={!isOpen}
+          {...(!isOpen ? { "aria-hidden": true as const } : {})}
           className="absolute inset-y-0 right-0 z-[2] flex h-full min-h-0 w-full min-w-0 max-w-[100vw] flex-col overflow-y-auto overflow-x-hidden bg-[#050505] px-4 py-6 shadow-[-12px_0_48px_rgba(0,0,0,0.45)] sm:max-w-[min(100vw,26rem)] sm:px-7 sm:py-9 md:max-w-[min(100vw,28rem)] md:px-8 md:py-10 lg:max-w-[min(100vw,34rem)] xl:max-w-[min(100vw,36rem)]"
         >
           <div className="flex shrink-0 items-start justify-between gap-3 border-b border-white/10 pb-5 sm:pb-6">

@@ -86,7 +86,7 @@ export function TechStackOrbit() {
       className="relative mt-10 overflow-hidden px-4 pb-[clamp(14vh,18vw,22vh)] pt-4 sm:px-10 lg:px-16"
     >
       <div
-        className="pointer-events-none absolute inset-0 -z-20 bg-[url('/images/hero-intro-paper-texture.png')] bg-cover bg-center bg-no-repeat"
+        className="pointer-events-none absolute inset-0 -z-20 bg-[radial-gradient(circle_at_20%_20%,rgba(147,180,255,0.14),transparent_42%),radial-gradient(circle_at_80%_72%,rgba(37,99,235,0.14),transparent_40%)]"
         aria-hidden
       />
       <div
