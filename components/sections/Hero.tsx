@@ -88,8 +88,8 @@ export function Hero() {
   const { open } = useNavMenu();
   /** 0 lead → 1 focus phrase → 2 headline done → 3 body typed */
   const [landingTextStep, setLandingTextStep] = useState(0);
-  /** Drives HeroExperiences deck: 0 ML → 1 Web → 2 Manager (synced to scroll in pinned hero). */
-  const [experiencePage, setExperiencePage] = useState(0);
+  /** Scrubbed 0→3 over the experience zone: each integer step stacks the next card (see HeroExperiences). */
+  const [experiencePageProgress, setExperiencePageProgress] = useState(0);
 
   const sectionRef = useRef<HTMLElement>(null);
   const pinWrapRef = useRef<HTMLDivElement>(null);
@@ -130,25 +130,26 @@ export function Hero() {
       gsap.set(scrollCue, { autoAlpha: 1 });
 
       let tl: gsap.core.Timeline;
-      let lastExpPage = -1;
+      let rafId: number | null = null;
+      let latestProgress = 0;
 
       const syncExperiencePageFromTimeline = () => {
         const time = tl.time();
-        let next: 0 | 1 | 2 = 0;
-        if (time < PHIL_PAGE_EXIT_START) {
-          next = 0;
-        } else if (time < EXPERIENCE_PAGE_ZONE_START) {
-          next = 0;
-        } else if (time >= EXPERIENCE_PAGE_ZONE_START && time < EXPERIENCE_PAGE_ZONE_END) {
-          const span = EXPERIENCE_PAGE_ZONE_END - EXPERIENCE_PAGE_ZONE_START;
-          const u = span > 0 ? (time - EXPERIENCE_PAGE_ZONE_START) / span : 0;
-          next = Math.min(2, Math.max(0, Math.floor(u * 3))) as 0 | 1 | 2;
+        let progress = 0;
+        if (time < EXPERIENCE_PAGE_ZONE_START) {
+          progress = 0;
+        } else if (time >= EXPERIENCE_PAGE_ZONE_END) {
+          progress = 3;
         } else {
-          next = 2;
+          const span = EXPERIENCE_PAGE_ZONE_END - EXPERIENCE_PAGE_ZONE_START;
+          progress = span > 0 ? ((time - EXPERIENCE_PAGE_ZONE_START) / span) * 3 : 0;
         }
-        if (next !== lastExpPage) {
-          lastExpPage = next;
-          setExperiencePage(next);
+        latestProgress = progress;
+        if (rafId == null) {
+          rafId = requestAnimationFrame(() => {
+            rafId = null;
+            setExperiencePageProgress(latestProgress);
+          });
         }
       };
 
@@ -200,6 +201,13 @@ export function Hero() {
       tl.to(landingInnovation, { autoAlpha: 0, duration: EXPERIENCES_EXIT_DURATION }, EXPERIENCES_EXIT_START);
 
       syncExperiencePageFromTimeline();
+
+      return () => {
+        if (rafId != null) {
+          cancelAnimationFrame(rafId);
+          rafId = null;
+        }
+      };
     },
     { revertOnUpdate: true },
   );
@@ -280,7 +288,7 @@ export function Hero() {
           ref={experiencesPageRef}
           className="pointer-events-auto absolute inset-0 z-[20] flex min-h-0 flex-col overflow-hidden bg-[#8B004A] will-change-transform"
         >
-          <HeroExperiences pageIndex={experiencePage} />
+          <HeroExperiences pageProgress={experiencePageProgress} />
         </div>
 
         {/* Card 3 — about scrapbook: narrowest layer, slides in from the right */}

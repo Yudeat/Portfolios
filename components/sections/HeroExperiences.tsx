@@ -41,6 +41,11 @@ const ROLES = [
   },
 ] as const;
 
+/** Linear 0–1 — matches GSAP scroll scrub 1:1 (same idea as About sliding on the hero timeline). */
+function scrub01(t: number) {
+  return Math.min(1, Math.max(0, t));
+}
+
 function DeckBackground() {
   return (
     <div
@@ -67,112 +72,183 @@ function Watermark({ lines }: { lines: (typeof ROLES)[number]["displayLines"] })
   );
 }
 
-type RolePageProps = {
-  slideIndex: number;
-  priority?: boolean;
-};
-
 function deckWidth(stackPos: number) {
   if (stackPos === 0) return "100%";
   return `calc(100% - ${stackPos * DECK_STEP_REM}rem)` as const;
 }
 
-/** One “page”: stacked right-aligned strips like Hero ambient → landing → About. */
-function RoleDeckPage({ slideIndex, priority }: RolePageProps) {
-  const depth = slideIndex + 1;
-  const stacks = ROLES.slice(0, depth);
+function BackStrip({
+  role,
+  stackPos,
+  zIndex,
+  opacity = 1,
+}: {
+  role: (typeof ROLES)[number];
+  stackPos: number;
+  zIndex: number;
+  opacity?: number;
+}) {
+  const width = deckWidth(stackPos);
+  return (
+    <div
+      className="pointer-events-none absolute inset-y-0 right-0 overflow-hidden rounded-l-[1rem] border-l border-[#F2EFE7]/[0.12] shadow-[-20px_0_48px_-10px_rgba(0,0,0,0.4)] will-change-[opacity] sm:rounded-l-3xl"
+      style={{ width, zIndex, opacity }}
+    >
+      <DeckBackground />
+      <Watermark lines={role.displayLines} />
+    </div>
+  );
+}
+
+type FrontProps = {
+  role: (typeof ROLES)[number];
+  stackPos: number;
+  zIndex: number;
+  stepNum: number;
+  opacity?: number;
+  translateXPct?: number;
+  priority?: boolean;
+};
+
+function FrontCard({ role: r, stackPos, zIndex, stepNum, opacity = 1, translateXPct = 0, priority }: FrontProps) {
+  const width = deckWidth(stackPos);
+  return (
+    <div
+      className="absolute inset-y-0 right-0 flex min-h-0 flex-col overflow-hidden overflow-y-auto rounded-l-[1rem] border-l border-[#F2EFE7]/20 shadow-[-24px_0_56px_-12px_rgba(0,0,0,0.42)] will-change-[transform,opacity] sm:rounded-l-3xl"
+      style={{
+        width,
+        zIndex,
+        opacity,
+        transform: `translate3d(${translateXPct}%, 0, 0)`,
+        backgroundColor: `${BG}f2`,
+      }}
+    >
+      <Watermark lines={r.displayLines} />
+      <div className="pointer-events-none absolute inset-0 z-[15] bg-gradient-to-b from-transparent via-transparent to-black/20" aria-hidden />
+
+      <header className="relative z-[40] flex shrink-0 items-start justify-between px-5 pb-2 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-8 md:px-10">
+        <span className="text-[0.62rem] font-semibold uppercase tracking-[0.28em] text-[#F2EFE7]/85 sm:text-[0.65rem]">
+          Professional experience
+        </span>
+        <span className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-[#F2EFE7]/55 sm:text-[0.65rem]">
+          {stepNum} / {ROLES.length}
+        </span>
+      </header>
+
+      <div className="relative z-[35] flex min-h-0 flex-1 flex-col px-5 pb-[max(6.5rem,env(safe-area-inset-bottom))] pt-4 sm:px-8 md:flex-row md:items-stretch md:gap-6 md:px-10 md:pb-8">
+        <div className="relative z-[35] flex max-w-xl flex-1 flex-col justify-center md:max-w-[46%]">
+          <p className="rounded-full border border-[#F2EFE7]/25 bg-black/15 px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.22em] text-[#F2EFE7] backdrop-blur-sm sm:text-xs">
+            {r.navLabel}
+          </p>
+          <p className="mt-5 text-[0.875rem] font-normal leading-[1.65] text-[#F2EFE7]/95 sm:text-[0.95rem]">{r.body}</p>
+        </div>
+
+        <div className="relative z-[35] mx-auto mt-6 w-[min(88%,20rem)] shrink-0 md:mx-0 md:mt-0 md:flex md:w-[min(48%,22rem)] md:items-center">
+          <div className="relative aspect-[3/4] w-full overflow-hidden rounded-sm shadow-[0_24px_70px_rgba(0,0,0,0.45)] ring-1 ring-[#F2EFE7]/22">
+            <Image
+              src={r.image}
+              alt={r.imageAlt}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 88vw, 22rem"
+              unoptimized
+              priority={priority}
+            />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" aria-hidden />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Right-aligned deck scrubbed with main scroll — each new role slides in from the right (like About),
+ * while the previous front becomes a narrow back strip with watermark (same pattern as Hero ambient → landing → About).
+ */
+function ExperienceScrubDeck({ pageProgress }: { pageProgress: number }) {
+  const p = Math.max(0, Math.min(3, pageProgress));
+
+  const w01 = Math.min(1, Math.max(0, p));
+  const w12 = Math.min(1, Math.max(0, p - 1));
+  const e01 = scrub01(w01);
+  const e12 = scrub01(w12);
+
+  const inFirst = p < 1;
 
   return (
-    <section
-      className="relative h-full min-h-0 w-full shrink-0 overflow-hidden"
-      style={{ color: FG }}
-      aria-label={`${ROLES[slideIndex].navLabel} experience page`}
-    >
+    <section className="relative h-full min-h-0 w-full overflow-hidden" style={{ color: FG }} aria-label="Professional experience deck">
       <div className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-b from-black/12 via-transparent to-black/22" aria-hidden />
 
-      {stacks.map((role, stackPos) => {
-        const isBack = stackPos < stacks.length - 1;
-        const width = deckWidth(stackPos);
-        const z = 10 + stackPos * 10;
-
-        if (isBack) {
-          return (
-            <div
-              key={`peek-${role.id}-${slideIndex}`}
-              className="pointer-events-none absolute inset-y-0 right-0 overflow-hidden rounded-l-[1rem] border-l border-[#F2EFE7]/[0.12] shadow-[-20px_0_48px_-10px_rgba(0,0,0,0.4)] sm:rounded-l-3xl"
-              style={{ width, zIndex: z }}
-            >
-              <DeckBackground />
-              <Watermark lines={role.displayLines} />
-            </div>
-          );
-        }
-
-        const r = role;
-        return (
-          <div
-            key={r.id}
-            className="absolute inset-y-0 right-0 flex min-h-0 flex-col overflow-hidden overflow-y-auto rounded-l-[1rem] border-l border-[#F2EFE7]/20 shadow-[-24px_0_56px_-12px_rgba(0,0,0,0.42)] sm:rounded-l-3xl"
-            style={{
-              width,
-              zIndex: z,
-              backgroundColor: `${BG}f2`,
-            }}
-          >
-            <Watermark lines={r.displayLines} />
-            <div className="pointer-events-none absolute inset-0 z-[15] bg-gradient-to-b from-transparent via-transparent to-black/20" aria-hidden />
-
-            <header className="relative z-[40] flex shrink-0 items-start justify-between px-5 pb-2 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-8 md:px-10">
-              <span className="text-[0.62rem] font-semibold uppercase tracking-[0.28em] text-[#F2EFE7]/85 sm:text-[0.65rem]">
-                Professional experience
-              </span>
-              <span className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-[#F2EFE7]/55 sm:text-[0.65rem]">
-                {slideIndex + 1} / {ROLES.length}
-              </span>
-            </header>
-
-            <div className="relative z-[35] flex min-h-0 flex-1 flex-col px-5 pb-[max(6.5rem,env(safe-area-inset-bottom))] pt-4 sm:px-8 md:flex-row md:items-stretch md:gap-6 md:px-10 md:pb-8">
-              <div className="relative z-[35] flex max-w-xl flex-1 flex-col justify-center md:max-w-[46%]">
-                <p className="rounded-full border border-[#F2EFE7]/25 bg-black/15 px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.22em] text-[#F2EFE7] backdrop-blur-sm sm:text-xs">
-                  {r.navLabel}
-                </p>
-                <p className="mt-5 text-[0.875rem] font-normal leading-[1.65] text-[#F2EFE7]/95 sm:text-[0.95rem]">{r.body}</p>
-              </div>
-
-              <div className="relative z-[35] mx-auto mt-6 w-[min(88%,20rem)] shrink-0 md:mx-0 md:mt-0 md:flex md:w-[min(48%,22rem)] md:items-center">
-                <div className="relative aspect-[3/4] w-full overflow-hidden rounded-sm shadow-[0_24px_70px_rgba(0,0,0,0.45)] ring-1 ring-[#F2EFE7]/22">
-                  <Image
-                    src={r.image}
-                    alt={r.imageAlt}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 88vw, 22rem"
-                    unoptimized
-                    priority={priority}
-                  />
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" aria-hidden />
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-      })}
+      {inFirst ? (
+        <>
+          {e01 > 0.002 ? <BackStrip role={ROLES[0]} stackPos={0} zIndex={10} opacity={e01} /> : null}
+          <FrontCard
+            role={ROLES[0]}
+            stackPos={0}
+            zIndex={18}
+            stepNum={1}
+            opacity={1 - e01}
+            translateXPct={0}
+            priority
+          />
+          <FrontCard
+            role={ROLES[1]}
+            stackPos={1}
+            zIndex={24}
+            stepNum={2}
+            opacity={1}
+            translateXPct={(1 - e01) * 100}
+          />
+        </>
+      ) : p < 2 ? (
+        <>
+          <BackStrip role={ROLES[0]} stackPos={0} zIndex={10} />
+          <BackStrip role={ROLES[1]} stackPos={1} zIndex={14} opacity={e12} />
+          <FrontCard
+            role={ROLES[1]}
+            stackPos={1}
+            zIndex={20}
+            stepNum={2}
+            opacity={1 - e12}
+            translateXPct={0}
+          />
+          <FrontCard
+            role={ROLES[2]}
+            stackPos={2}
+            zIndex={26}
+            stepNum={3}
+            opacity={1}
+            translateXPct={(1 - e12) * 100}
+          />
+        </>
+      ) : (
+        <>
+          <BackStrip role={ROLES[0]} stackPos={0} zIndex={10} />
+          <BackStrip role={ROLES[1]} stackPos={1} zIndex={14} />
+          <FrontCard role={ROLES[2]} stackPos={2} zIndex={24} stepNum={3} opacity={1} priority={false} />
+        </>
+      )}
     </section>
   );
 }
 
 export type HeroExperiencesProps = {
-  /** 0 = ML, 1 = Web Full Stack, 2 = Manager — driven by main scroll in `Hero` GSAP timeline. */
-  pageIndex: number;
+  /**
+   * Continuous 0 → 3 over the experience scroll zone (synced to hero GSAP scrub).
+   * Each unit step adds the next card from the right, like the About scrapbook sliding over the stack.
+   */
+  pageProgress: number;
 };
 
-export function HeroExperiences({ pageIndex }: HeroExperiencesProps) {
-  const idx = Math.min(ROLES.length - 1, Math.max(0, pageIndex));
+export function HeroExperiences({ pageProgress }: HeroExperiencesProps) {
+  const p = Math.max(0, Math.min(3, pageProgress));
+  const navIdx = Math.min(ROLES.length - 1, Math.max(0, Math.floor(Math.min(p, 2.999))));
 
   return (
     <div className="relative flex h-full min-h-0 w-full flex-col" style={{ backgroundColor: BG }}>
       <div className="relative min-h-0 flex-1 overflow-hidden">
-        <RoleDeckPage slideIndex={idx} priority={idx === 0} />
+        <ExperienceScrubDeck pageProgress={p} />
       </div>
 
       <nav
@@ -184,8 +260,8 @@ export function HeroExperiences({ pageIndex }: HeroExperiencesProps) {
           {ROLES.map((r, i) => (
             <span
               key={r.id}
-              className={`whitespace-nowrap text-[0.62rem] font-semibold uppercase tracking-[0.2em] transition sm:text-[0.68rem] ${
-                idx === i ? "text-[#F2EFE7]" : "text-[#F2EFE7]/45"
+              className={`whitespace-nowrap text-[0.62rem] font-semibold uppercase tracking-[0.2em] transition-colors duration-200 sm:text-[0.68rem] ${
+                navIdx === i ? "text-[#F2EFE7]" : "text-[#F2EFE7]/45"
               }`}
             >
               {r.navLabel}
