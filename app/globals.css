@@ -1,4 +1,10 @@
 @import "tailwindcss";
+@import "lenis/dist/lenis.css";
+
+/* Native smooth-scroll fights Lenis; Lenis owns scrolling while active */
+html.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
 
 :root {
   --bg: #050505;

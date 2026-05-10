@@ -5,6 +5,7 @@ import gsap from "gsap";
 import Link from "next/link";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useLenis } from "@/components/providers/SmoothScrollProvider";
+import { SectionHashLink } from "@/components/navigation/SectionHashLink";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -15,7 +16,7 @@ type NavLinkItem = {
 };
 
 const MENU_LINKS: NavLinkItem[] = [
-  { href: "/", label: "Home" },
+  { href: "/#hero", label: "Home" },
   { href: "/#philosophy", label: "Philosophy", count: 1 },
   { href: "/#work", label: "Work", count: 3 },
   { href: "/#lab", label: "Lab", count: 4 },
@@ -42,6 +43,13 @@ export function SplitScreenNav({
   const initializedRef = useRef(false);
   const lenisRef = useRef(lenis);
   const wasMenuOpenRef = useRef(false);
+  /**
+   * When true, finishing the panel close animation must skip an immediate `ScrollTrigger.refresh()`
+   * (Hero pin + Lenis settle after ~950ms programmatic scroll — mid-flight refresh snaps back to landing).
+   * We refresh once afterward with a bounded delay instead.
+   */
+  const deferPanelScrollTriggerRefreshRef = useRef(false);
+  const deferredPanelRefreshTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     lenisRef.current = lenis;
@@ -127,9 +135,26 @@ export function SplitScreenNav({
     }
 
     const restoreScroll = () => {
+      if (deferredPanelRefreshTimeoutRef.current) {
+        clearTimeout(deferredPanelRefreshTimeoutRef.current);
+        deferredPanelRefreshTimeoutRef.current = null;
+      }
       ScrollTrigger.enable();
       lenis?.start();
-      ScrollTrigger.refresh();
+      const deferRefresh = deferPanelScrollTriggerRefreshRef.current;
+      deferPanelScrollTriggerRefreshRef.current = false;
+      if (deferRefresh) {
+        deferredPanelRefreshTimeoutRef.current = setTimeout(() => {
+          deferredPanelRefreshTimeoutRef.current = null;
+          ScrollTrigger.refresh();
+        }, 1050);
+        return;
+      }
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          ScrollTrigger.refresh();
+        });
+      });
     };
 
     const tl = gsap.timeline({
@@ -146,6 +171,14 @@ export function SplitScreenNav({
       tl.kill();
     };
   }, [isOpen, lenis]);
+
+  useEffect(() => {
+    return () => {
+      if (deferredPanelRefreshTimeoutRef.current) {
+        clearTimeout(deferredPanelRefreshTimeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div className="pointer-events-none fixed inset-0 z-[8500] min-w-0">
@@ -198,10 +231,13 @@ export function SplitScreenNav({
             aria-label="Primary"
           >
             {MENU_LINKS.map((item) => (
-              <Link
+              <SectionHashLink
                 key={item.href + item.label}
                 href={item.href}
                 data-split-nav-link
+                beforeNavigate={() => {
+                  deferPanelScrollTriggerRefreshRef.current = true;
+                }}
                 onClick={onClose}
                 className="split-nav-link group flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-1 py-3.5 text-[clamp(1.2rem,5.2vw,2.85rem)] font-semibold uppercase leading-[1.05] tracking-[-0.02em] text-white no-underline sm:gap-3 sm:py-4 sm:leading-none sm:text-[clamp(1.35rem,3.6vw,2.75rem)] md:text-[clamp(1.45rem,3.2vw,2.85rem)]"
               >
@@ -217,7 +253,7 @@ export function SplitScreenNav({
                 >
                   →
                 </span>
-              </Link>
+              </SectionHashLink>
             ))}
           </nav>
 

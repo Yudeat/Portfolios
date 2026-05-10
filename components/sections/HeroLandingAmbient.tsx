@@ -81,7 +81,7 @@ export function HeroLandingAmbient() {
             PD
           </span>
         </div>
-        <p className="mt-2.5 text-center font-sans text-[0.5625rem] font-medium uppercase tracking-[0.62em] text-neutral-950 sm:text-[0.625rem] sm:tracking-[0.72em]">
+        <p className="mt-2.5 text-center font-sans text-[0.5625rem] font-medium uppercase tracking-[0.62em] text-white/92 sm:text-[0.625rem] sm:tracking-[0.72em]">
           Predeep
         </p>
       </div>

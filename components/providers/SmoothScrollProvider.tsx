@@ -13,6 +13,8 @@ import Lenis from "lenis";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const HASH_SCROLL_EASE = (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t));
+
 const LenisContext = createContext<Lenis | null>(null);
 
 export function useLenis() {
@@ -24,9 +26,14 @@ export function SmoothScrollProvider({ children }: PropsWithChildren) {
 
   useEffect(() => {
     const instance = new Lenis({
-      duration: 1.2,
       smoothWheel: true,
-      syncTouch: false,
+      /** Softer inertia than default `lerp`; wheel smoothing follows `lerp`, not `duration`. */
+      lerp: 0.065,
+      wheelMultiplier: 0.88,
+      /** Smooth vertical momentum on touch devices while staying synced with GSAP */
+      syncTouch: true,
+      syncTouchLerp: 0.075,
+      touchMultiplier: 1,
     });
 
     const onScroll = () => ScrollTrigger.update();
@@ -63,6 +70,19 @@ export function SmoothScrollProvider({ children }: PropsWithChildren) {
     queueMicrotask(() => {
       setLenis(instance);
       ScrollTrigger.refresh();
+      const hash = typeof window !== "undefined" ? window.location.hash : "";
+      if (hash && document.querySelector(hash)) {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            instance.scrollTo(hash, {
+              force: true,
+              duration: 0.95,
+              easing: HASH_SCROLL_EASE,
+            });
+            ScrollTrigger.refresh();
+          });
+        });
+      }
     });
 
     return () => {

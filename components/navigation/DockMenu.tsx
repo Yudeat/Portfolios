@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { SectionHashLink } from "@/components/navigation/SectionHashLink";
 import type { ReactNode } from "react";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useActiveSection } from "@/components/providers/ActiveSectionProvider";
@@ -172,9 +172,8 @@ function SatelliteButton({
 }) {
   const Icon = item.icon;
   return (
-    <Link
+    <SectionHashLink
       href={item.href}
-      scroll
       tabIndex={expanded ? undefined : -1}
       onClick={onPick}
       aria-current={isActive ? "page" : undefined}
@@ -190,7 +189,7 @@ function SatelliteButton({
         aria-hidden
       />
       <Icon className="relative shrink-0 drop-shadow-[0_0_10px_rgba(63,124,255,0.35)]" />
-    </Link>
+    </SectionHashLink>
   );
 }
 
