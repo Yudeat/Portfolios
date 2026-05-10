@@ -151,7 +151,7 @@ function SatelliteShell({
       <div
         className={`absolute bottom-full left-1/2 mb-2 -translate-x-1/2 ${expanded ? "pointer-events-auto" : "pointer-events-none"}`}
         style={{ transform: `rotate(${-angleDeg}deg)` }}
-        aria-hidden={!expanded}
+        {...(!expanded ? { "aria-hidden": true } : {})}
       >
         {children}
       </div>
@@ -391,6 +391,9 @@ export function DockMenu() {
               <div className="relative rounded-full border border-white/[0.1] bg-gradient-to-b from-white/[0.1] to-transparent p-px shadow-[inset_0_1px_0_rgba(255,255,255,0.14)]">
                 <button
                   type="button"
+                  ref={(node) => {
+                    if (node) node.setAttribute("aria-expanded", expanded ? "true" : "false");
+                  }}
                   onClick={() => {
                     if (suppressHubClickRef.current) {
                       suppressHubClickRef.current = false;
@@ -402,7 +405,6 @@ export function DockMenu() {
                   onPointerMove={onHubPointerMove}
                   onPointerUp={onHubPointerUp}
                   onPointerCancel={onHubPointerUp}
-                  aria-expanded={expanded}
                   aria-label={
                     expanded
                       ? "Close section dock"
