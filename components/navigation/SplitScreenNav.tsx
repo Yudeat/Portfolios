@@ -18,6 +18,7 @@ type NavLinkItem = {
 const MENU_LINKS: NavLinkItem[] = [
   { href: "/#hero", label: "Home" },
   { href: "/#philosophy", label: "Philosophy", count: 1 },
+  { href: "/#how-it-works", label: "How it works", count: 4 },
   { href: "/#work", label: "Work", count: 3 },
   { href: "/#contact", label: "Contact", count: 1 },
 ];

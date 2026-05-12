@@ -1,6 +1,7 @@
 import { Hero } from "@/components/sections/Hero";
 import { NarrativeHorizontalScroll } from "@/components/narrative/NarrativeHorizontalScroll";
 import { Philosophy } from "@/components/sections/Philosophy";
+import { HowItWorks } from "@/components/sections/HowItWorks";
 import { SiteFooter } from "@/components/sections/SiteFooter";
 import { StackCard } from "@/components/layout/StackCard";
 
@@ -13,11 +14,15 @@ export default function Home() {
         <Philosophy />
       </StackCard>
 
-      <StackCard id="work" stackIndex={2} className="scroll-mt-20 bg-[#070707]">
+      <StackCard id="how-it-works" stackIndex={2} className="scroll-mt-20 bg-white">
+        <HowItWorks />
+      </StackCard>
+
+      <StackCard id="work" stackIndex={3} className="scroll-mt-20 bg-[#070707]">
         <NarrativeHorizontalScroll />
       </StackCard>
 
-      <StackCard id="contact" stackIndex={3} className="bg-white">
+      <StackCard id="contact" stackIndex={4} className="bg-white">
         <SiteFooter />
       </StackCard>
     </main>
