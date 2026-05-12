@@ -33,6 +33,178 @@ body {
     animation: hero-scroll-hint-bounce 1.5s cubic-bezier(0.45, 0, 0.55, 1) infinite;
     will-change: transform;
   }
+
+  .preloader-panels {
+    opacity: 0;
+    perspective: 1200px;
+    transition: opacity 1ms linear;
+  }
+
+  .preloader-is-exiting .preloader-panels {
+    opacity: 1;
+  }
+
+  .preloader-panel {
+    position: absolute;
+    width: calc(50% + 2px);
+    height: calc(50% + 2px);
+    overflow: hidden;
+    background: #17121b;
+    transition: transform 950ms cubic-bezier(0.76, 0, 0.24, 1), filter 950ms cubic-bezier(0.76, 0, 0.24, 1);
+    will-change: transform;
+  }
+
+  .preloader-full-scene,
+  .preloader-scene-piece {
+    position: absolute;
+    background:
+      radial-gradient(circle at 50% 34%, rgba(245, 169, 48, 0.88) 0 16%, transparent 38%),
+      radial-gradient(circle at 32% 36%, rgba(42, 92, 112, 0.82) 0 18%, transparent 40%),
+      radial-gradient(ellipse at 8% 100%, rgba(62, 38, 45, 0.9) 0 16%, transparent 34%),
+      radial-gradient(ellipse at 22% 95%, rgba(99, 71, 54, 0.86) 0 18%, transparent 36%),
+      radial-gradient(ellipse at 72% 95%, rgba(132, 83, 46, 0.78) 0 18%, transparent 38%),
+      radial-gradient(ellipse at 95% 75%, rgba(68, 39, 43, 0.88) 0 18%, transparent 36%),
+      radial-gradient(ellipse at 22% 8%, rgba(51, 35, 44, 0.82) 0 19%, transparent 38%),
+      radial-gradient(ellipse at 82% 12%, rgba(84, 52, 43, 0.82) 0 20%, transparent 40%),
+      radial-gradient(circle at 50% 45%, rgba(255, 188, 69, 0.16), transparent 34%),
+      linear-gradient(180deg, rgba(4, 7, 12, 0.03), rgba(9, 5, 7, 0.44)),
+      linear-gradient(125deg, #271825 0%, #1e4455 32%, #d18d28 54%, #42222a 100%);
+    animation: preloader-cloud-drift 9s ease-in-out infinite alternate;
+    filter: blur(0.5px);
+    will-change: transform;
+  }
+
+  .preloader-full-scene {
+    inset: 0;
+    opacity: 1;
+    transition: opacity 90ms linear;
+  }
+
+  .preloader-is-exiting .preloader-full-scene {
+    opacity: 0;
+  }
+
+  .preloader-scene-piece {
+    width: 100vw;
+    height: 100vh;
+  }
+
+  .preloader-panel-tl .preloader-scene-piece {
+    left: 0;
+    top: 0;
+  }
+
+  .preloader-panel-tr .preloader-scene-piece {
+    right: 0;
+    top: 0;
+  }
+
+  .preloader-panel-bl .preloader-scene-piece {
+    bottom: 0;
+    left: 0;
+  }
+
+  .preloader-panel-br .preloader-scene-piece {
+    bottom: 0;
+    right: 0;
+  }
+
+  .preloader-panel-tl {
+    left: 0;
+    top: 0;
+    background-position: left top;
+    transform-origin: 100% 100%;
+  }
+
+  .preloader-panel-tr {
+    right: 0;
+    top: 0;
+    background-position: right top;
+    transform-origin: 0 100%;
+  }
+
+  .preloader-panel-bl {
+    bottom: 0;
+    left: 0;
+    background-position: left bottom;
+    transform-origin: 100% 0;
+  }
+
+  .preloader-panel-br {
+    bottom: 0;
+    right: 0;
+    background-position: right bottom;
+    transform-origin: 0 0;
+  }
+
+  .preloader-is-exiting .preloader-panel {
+    filter: blur(1px);
+  }
+
+  .preloader-is-exiting .preloader-panel-tl {
+    transform: translate3d(-104%, -104%, 0) rotate(-1.5deg);
+  }
+
+  .preloader-is-exiting .preloader-panel-tr {
+    transform: translate3d(104%, -104%, 0) rotate(1.5deg);
+  }
+
+  .preloader-is-exiting .preloader-panel-bl {
+    transform: translate3d(-104%, 104%, 0) rotate(1.5deg);
+  }
+
+  .preloader-is-exiting .preloader-panel-br {
+    transform: translate3d(104%, 104%, 0) rotate(-1.5deg);
+  }
+
+  .preloader-is-exiting .preloader-float-layer,
+  .preloader-is-exiting .preloader-load-content {
+    opacity: 0;
+    filter: blur(4px);
+    transform: scale(1.08);
+  }
+
+  .preloader-sky {
+    background:
+      radial-gradient(circle at 50% 34%, rgba(245, 169, 48, 0.88) 0 16%, transparent 38%),
+      radial-gradient(circle at 32% 36%, rgba(42, 92, 112, 0.82) 0 18%, transparent 40%),
+      linear-gradient(125deg, #271825 0%, #1e4455 32%, #d18d28 54%, #42222a 100%);
+  }
+
+  .preloader-clouds {
+    background:
+      radial-gradient(ellipse at 8% 100%, rgba(62, 38, 45, 0.9) 0 16%, transparent 34%),
+      radial-gradient(ellipse at 22% 95%, rgba(99, 71, 54, 0.86) 0 18%, transparent 36%),
+      radial-gradient(ellipse at 72% 95%, rgba(132, 83, 46, 0.78) 0 18%, transparent 38%),
+      radial-gradient(ellipse at 95% 75%, rgba(68, 39, 43, 0.88) 0 18%, transparent 36%),
+      radial-gradient(ellipse at 22% 8%, rgba(51, 35, 44, 0.82) 0 19%, transparent 38%),
+      radial-gradient(ellipse at 82% 12%, rgba(84, 52, 43, 0.82) 0 20%, transparent 40%);
+    animation: preloader-cloud-drift 9s ease-in-out infinite alternate;
+    filter: blur(0.5px);
+    will-change: transform;
+  }
+
+  .preloader-dove {
+    animation: preloader-dove-float 4.5s ease-in-out infinite;
+    will-change: transform;
+  }
+
+  .preloader-dove:nth-of-type(2n) {
+    animation-name: preloader-dove-float-alt;
+    animation-duration: 5.4s;
+  }
+
+  .preloader-dove-wing-left,
+  .preloader-dove-wing-right {
+    animation: preloader-wing-flutter 1.4s ease-in-out infinite alternate;
+    transform-box: fill-box;
+    transform-origin: 70% 70%;
+  }
+
+  .preloader-dove-wing-right {
+    animation-delay: 0.15s;
+    transform-origin: 25% 70%;
+  }
 }
 
 @keyframes hero-scroll-hint-bounce {
@@ -43,6 +215,57 @@ body {
 
   50% {
     transform: translate3d(0, 10px, 0);
+  }
+}
+
+@keyframes preloader-cloud-drift {
+  from {
+    transform: translate3d(-1.5%, -1%, 0) scale(1.04);
+  }
+
+  to {
+    transform: translate3d(1.5%, 1%, 0) scale(1.08);
+  }
+}
+
+@keyframes preloader-dove-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(var(--dove-rotate, 0deg));
+  }
+
+  50% {
+    transform: translate3d(10px, -14px, 0) rotate(var(--dove-rotate, 0deg));
+  }
+}
+
+@keyframes preloader-dove-float-alt {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(var(--dove-rotate, 0deg));
+  }
+
+  50% {
+    transform: translate3d(-12px, -18px, 0) rotate(var(--dove-rotate, 0deg));
+  }
+}
+
+@keyframes preloader-wing-flutter {
+  from {
+    transform: rotate(0deg) scaleY(1);
+  }
+
+  to {
+    transform: rotate(-5deg) scaleY(0.94);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .preloader-clouds,
+  .preloader-dove,
+  .preloader-dove-wing-left,
+  .preloader-dove-wing-right {
+    animation: none;
   }
 }
 

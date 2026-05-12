@@ -1,9 +1,12 @@
 "use client";
 
 import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 
 /** Match Hero editorial deck (`Hero.tsx` HERO_DECK_STEP_REM) — left strip peeks through. */
 const DECK_STEP_REM = 3.25;
+const PROGRESS_LERP = 0.16;
+const PROGRESS_EPSILON = 0.002;
 
 const BG = "#8B004A";
 const FG = "#F2EFE7";
@@ -41,9 +44,67 @@ const ROLES = [
   },
 ] as const;
 
-/** Linear 0–1 — matches GSAP scroll scrub 1:1 (same idea as About sliding on the hero timeline). */
+function clampPageProgress(value: number) {
+  return Math.min(3, Math.max(0, value));
+}
+
 function scrub01(t: number) {
-  return Math.min(1, Math.max(0, t));
+  const x = Math.min(1, Math.max(0, t));
+  return x * x * (3 - 2 * x);
+}
+
+function useSmoothedProgress(targetProgress: number) {
+  const [progress, setProgress] = useState(() => clampPageProgress(targetProgress));
+  const frameRef = useRef<number | null>(null);
+  const progressRef = useRef(progress);
+  const targetRef = useRef(progress);
+
+  useEffect(() => {
+    return () => {
+      if (frameRef.current != null) {
+        cancelAnimationFrame(frameRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const target = clampPageProgress(targetProgress);
+    targetRef.current = target;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      if (frameRef.current != null) {
+        cancelAnimationFrame(frameRef.current);
+      }
+      frameRef.current = requestAnimationFrame(() => {
+        progressRef.current = targetRef.current;
+        setProgress(targetRef.current);
+        frameRef.current = null;
+      });
+      return;
+    }
+
+    if (frameRef.current != null) return;
+
+    const tick = () => {
+      const distance = targetRef.current - progressRef.current;
+
+      if (Math.abs(distance) <= PROGRESS_EPSILON) {
+        progressRef.current = targetRef.current;
+        setProgress(targetRef.current);
+        frameRef.current = null;
+        return;
+      }
+
+      const next = progressRef.current + distance * PROGRESS_LERP;
+      progressRef.current = next;
+      setProgress(next);
+      frameRef.current = requestAnimationFrame(tick);
+    };
+
+    frameRef.current = requestAnimationFrame(tick);
+  }, [targetProgress]);
+
+  return progress;
 }
 
 function DeckBackground() {
@@ -167,7 +228,7 @@ function FrontCard({ role: r, stackPos, zIndex, stepNum, opacity = 1, translateX
  * while the previous front becomes a narrow back strip with watermark (same pattern as Hero ambient → landing → About).
  */
 function ExperienceScrubDeck({ pageProgress }: { pageProgress: number }) {
-  const p = Math.max(0, Math.min(3, pageProgress));
+  const p = clampPageProgress(pageProgress);
 
   const w01 = Math.min(1, Math.max(0, p));
   const w12 = Math.min(1, Math.max(0, p - 1));
@@ -242,7 +303,7 @@ export type HeroExperiencesProps = {
 };
 
 export function HeroExperiences({ pageProgress }: HeroExperiencesProps) {
-  const p = Math.max(0, Math.min(3, pageProgress));
+  const p = useSmoothedProgress(pageProgress);
   const navIdx = Math.min(ROLES.length - 1, Math.max(0, Math.floor(Math.min(p, 2.999))));
 
   return (

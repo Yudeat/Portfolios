@@ -2,9 +2,7 @@
 
 import Link from "next/link";
 import type { ComponentProps, MouseEvent } from "react";
-import { useLenis } from "@/components/providers/SmoothScrollProvider";
-
-const DEFAULT_EASING = (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t));
+import { SITE_SCROLL_DURATION, SITE_SCROLL_EASE, useLenis } from "@/components/providers/SmoothScrollProvider";
 
 type SectionHashLinkProps = Omit<ComponentProps<typeof Link>, "onClick" | "scroll"> & {
   onClick?: (e: MouseEvent<HTMLAnchorElement>) => void;
@@ -76,8 +74,8 @@ export function SectionHashLink(props: SectionHashLinkProps & { onNavigateComple
     onClick?.(e);
     lenis.scrollTo(hash, {
       force: true,
-      duration: 0.95,
-      easing: DEFAULT_EASING,
+      duration: SITE_SCROLL_DURATION,
+      easing: SITE_SCROLL_EASE,
     });
     window.history.replaceState(null, "", `${pathname}${search}${hash}`);
   };

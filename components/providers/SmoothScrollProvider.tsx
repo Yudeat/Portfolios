@@ -13,7 +13,8 @@ import Lenis from "lenis";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const HASH_SCROLL_EASE = (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t));
+export const SITE_SCROLL_DURATION = 1.18;
+export const SITE_SCROLL_EASE = (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t));
 
 const LenisContext = createContext<Lenis | null>(null);
 
@@ -27,13 +28,13 @@ export function SmoothScrollProvider({ children }: PropsWithChildren) {
   useEffect(() => {
     const instance = new Lenis({
       smoothWheel: true,
-      /** Softer inertia than default `lerp`; wheel smoothing follows `lerp`, not `duration`. */
-      lerp: 0.065,
-      wheelMultiplier: 0.88,
-      /** Smooth vertical momentum on touch devices while staying synced with GSAP */
+      /** Lower lerp + multiplier gives the whole site a softer, less jumpy scroll feel. */
+      lerp: 0.052,
+      wheelMultiplier: 0.74,
+      /** Smooth vertical momentum on touch devices while staying synced with GSAP. */
       syncTouch: true,
-      syncTouchLerp: 0.075,
-      touchMultiplier: 1,
+      syncTouchLerp: 0.06,
+      touchMultiplier: 0.9,
     });
 
     const onScroll = () => ScrollTrigger.update();
@@ -76,8 +77,8 @@ export function SmoothScrollProvider({ children }: PropsWithChildren) {
           requestAnimationFrame(() => {
             instance.scrollTo(hash, {
               force: true,
-              duration: 0.95,
-              easing: HASH_SCROLL_EASE,
+              duration: SITE_SCROLL_DURATION,
+              easing: SITE_SCROLL_EASE,
             });
             ScrollTrigger.refresh();
           });

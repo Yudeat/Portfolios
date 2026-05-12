@@ -4,6 +4,7 @@ import "./globals.css";
 import { ActiveSectionProvider } from "@/components/providers/ActiveSectionProvider";
 import { NavMenuProvider } from "@/components/providers/NavMenuProvider";
 import { SmoothScrollProvider } from "@/components/providers/SmoothScrollProvider";
+import { FirstLoadScreen } from "@/components/ui/FirstLoadScreen";
 import { InteractiveCursor } from "@/components/ui/InteractiveCursor";
 
 const inter = Inter({
@@ -37,6 +38,7 @@ export default function RootLayout({
         className={`${inter.variable} ${playfair.variable} min-w-0 overflow-x-clip bg-[#050505] font-sans text-white antialiased`}
       >
         <SmoothScrollProvider>
+          <FirstLoadScreen />
           <ActiveSectionProvider>
             <NavMenuProvider>{children}</NavMenuProvider>
           </ActiveSectionProvider>
