@@ -17,7 +17,7 @@ export function NarrativeHorizontalScroll() {
       ref={narrativeContainerRef}
       className="narrative-container relative border-y border-white/10 bg-[#070707] px-4 py-12 sm:px-8 md:h-screen md:overflow-hidden md:px-10 md:py-10 lg:px-16"
     >
-      {/* Static bridge into Lab palette — avoids full-screen black overlay during pin tail */}
+      
       <div
         className="pointer-events-none absolute inset-x-0 bottom-0 z-[5] hidden h-[min(28vh,200px)] bg-gradient-to-b from-transparent via-[#050505]/40 to-[#050505]/92 md:block"
         aria-hidden
