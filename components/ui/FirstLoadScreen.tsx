@@ -33,7 +33,7 @@ function rememberLoader() {
 
 function Dove({ className = "" }: { className?: string }) {
   return (
-    <span className={`preloader-dove absolute block text-[#fffaf0] drop-shadow-[0_8px_16px_rgba(255,244,214,0.24)] ${className}`} aria-hidden>
+    <span className={`preloader-dove absolute block text-white drop-shadow-[0_10px_18px_rgba(16,17,22,0.16)] ${className}`} aria-hidden>
       <svg viewBox="0 0 120 78" className="h-full w-full" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path className="preloader-dove-wing-left" d="M57 37C44 23 31 11 7 5c7 22 20 37 41 43l9-11Z" fill="currentColor" />
         <path className="preloader-dove-wing-right" d="M61 36c16-15 31-25 54-27-8 20-22 33-45 38l-9-11Z" fill="currentColor" />
@@ -132,7 +132,7 @@ export function FirstLoadScreen() {
 
   return (
     <div
-      className={`preloader-root fixed inset-0 z-[9999] flex min-h-dvh items-center justify-center overflow-hidden text-[#fff8e8] ${
+      className={`preloader-root fixed inset-0 z-[9999] flex min-h-dvh items-center justify-center overflow-hidden text-[#26384a] ${
         phase === "exiting" ? "preloader-is-exiting pointer-events-none" : ""
       }`}
       role="status"
@@ -166,14 +166,14 @@ export function FirstLoadScreen() {
       </div>
 
       <div className="preloader-load-content relative z-20 flex w-[min(84vw,360px)] flex-col items-center text-center transition-[opacity,transform,filter] duration-500 ease-out">
-        <div className="flex w-full items-center gap-3 font-hero-serif text-xs text-[#fff8e8]/90 sm:text-sm">
+        <div className="flex w-full items-center gap-3 font-hero-serif text-xs text-[#26384a]/85 sm:text-sm">
           <span className="min-w-7 text-right tabular-nums">{progress}</span>
-          <div className="h-px flex-1 overflow-hidden bg-[#fff8e8]/38">
-            <div className="h-full bg-[#fff8e8] transition-[width] duration-200 ease-linear" style={{ width: `${progress}%` }} />
+          <div className="h-px flex-1 overflow-hidden bg-[#26384a]/25">
+            <div className="h-full bg-[#26384a] transition-[width] duration-200 ease-linear" style={{ width: `${progress}%` }} />
           </div>
           <span>100</span>
         </div>
-        <p className="mt-4 text-[0.62rem] font-bold uppercase tracking-[0.22em] text-[#fff8e8] sm:text-xs">Loading...</p>
+        <p className="mt-4 text-[0.62rem] font-bold uppercase tracking-[0.22em] text-[#26384a] sm:text-xs">Loading...</p>
       </div>
     </div>
   );

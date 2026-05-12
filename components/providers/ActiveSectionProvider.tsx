@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useMemo, useState, type PropsWithChildren } from "react";
 
-export const SECTION_IDS = ["hero", "philosophy", "work", "lab", "contact"] as const;
+export const SECTION_IDS = ["hero", "philosophy", "work", "contact"] as const;
 
 export type SectionId = (typeof SECTION_IDS)[number];
 

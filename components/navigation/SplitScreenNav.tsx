@@ -19,7 +19,6 @@ const MENU_LINKS: NavLinkItem[] = [
   { href: "/#hero", label: "Home" },
   { href: "/#philosophy", label: "Philosophy", count: 1 },
   { href: "/#work", label: "Work", count: 3 },
-  { href: "/#lab", label: "Lab", count: 4 },
   { href: "/#contact", label: "Contact", count: 1 },
 ];
 
