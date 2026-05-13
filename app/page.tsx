@@ -15,15 +15,27 @@ export default function Home() {
         id="projects"
         stackIndex={1}
         className="-mt-[min(44vh,520px)] scroll-mt-20 bg-white"
+        minHeightClass="min-h-0"
       >
         <SelectedWorkProjects />
       </StackCard>
 
-      <StackCard id="how-it-works" stackIndex={2} className="scroll-mt-20 bg-white">
+      <StackCard
+        id="how-it-works"
+        stackIndex={2}
+        className="scroll-mt-20 bg-white"
+        minHeightClass="min-h-0"
+      >
         <HowItWorks />
       </StackCard>
 
-      <StackCard id="work" stackIndex={3} sticky={false} className="scroll-mt-20 bg-[#060606]">
+      <StackCard
+        id="work"
+        stackIndex={3}
+        sticky={false}
+        className="scroll-mt-20 bg-[#060606]"
+        minHeightClass="min-h-0"
+      >
         <SkillsExpertiseSection />
       </StackCard>
 

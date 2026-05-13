@@ -250,7 +250,7 @@ export function ExperienceSection() {
         aria-hidden
       />
 
-      <div className="relative z-[1] mx-auto w-full max-w-[1400px] px-4 pb-6 pt-8 sm:px-8 sm:pb-8 sm:pt-10 lg:px-12">
+      <div className="relative z-[1] mx-auto w-full max-w-[1400px] px-4 pb-4 pt-6 sm:px-8 sm:pb-5 sm:pt-7 lg:px-12">
         <div className="mx-auto flex w-full max-w-3xl flex-col items-center">
           <div className="flex w-full items-center justify-center gap-4 sm:gap-6">
             <span className="h-px min-w-[2.5rem] flex-1 bg-white/35 sm:min-w-[4rem]" aria-hidden />
@@ -260,7 +260,7 @@ export function ExperienceSection() {
             <span className="h-px min-w-[2.5rem] flex-1 bg-white/35 sm:min-w-[4rem]" aria-hidden />
           </div>
 
-          <div className="relative mt-5 flex items-start justify-center gap-3 sm:mt-6 sm:gap-4">
+          <div className="relative mt-3 flex items-start justify-center gap-3 sm:mt-4 sm:gap-4">
             <span
               className="mt-1.5 inline-flex h-3.5 w-3.5 shrink-0 items-center justify-center border border-white/75 sm:mt-2 sm:h-4 sm:w-4"
               aria-hidden
@@ -275,37 +275,37 @@ export function ExperienceSection() {
             </h2>
           </div>
 
-          <p className="mx-auto mt-3 max-w-xl text-center text-pretty text-sm leading-relaxed text-white/72 sm:mt-4 sm:text-base">
+          <p className="mx-auto mt-2 max-w-xl text-center text-pretty text-sm leading-relaxed text-white/72 sm:mt-3 sm:text-base">
             A journey of continuous learning, innovation, and impactful contributions
           </p>
 
-          <div className="mx-auto mt-6 grid w-full max-w-3xl grid-cols-3 gap-5 sm:mt-8 sm:gap-8">
+          <div className="mx-auto mt-4 grid w-full max-w-3xl grid-cols-3 gap-4 sm:mt-5 sm:gap-6">
             {STATS.map((row) => (
               <div key={row.label} className="flex flex-col items-center text-center">
                 <p className="font-hero-serif text-[clamp(1.5rem,4.5vw,2.25rem)] font-semibold tabular-nums tracking-tight text-white">
                   {row.value}
                 </p>
-                <span className="mt-2 h-px w-full max-w-[4.5rem] bg-white/40 sm:mt-3 sm:max-w-[5.5rem]" aria-hidden />
-                <p className="mt-2 max-w-[9rem] font-mono text-[0.5rem] font-semibold uppercase leading-snug tracking-[0.18em] text-white/60 sm:text-[0.55rem] sm:tracking-[0.2em]">
+                <span className="mt-1.5 h-px w-full max-w-[4.5rem] bg-white/40 sm:mt-2 sm:max-w-[5.5rem]" aria-hidden />
+                <p className="mt-1.5 max-w-[9rem] font-mono text-[0.5rem] font-semibold uppercase leading-snug tracking-[0.18em] text-white/60 sm:mt-2 sm:text-[0.55rem] sm:tracking-[0.2em]">
                   {row.label}
                 </p>
               </div>
             ))}
           </div>
+
+          <p className="pointer-events-none mt-5 grid justify-items-center text-center sm:mt-6">
+            <span className="relative max-w-[16ch] text-[10px] font-medium uppercase leading-snug tracking-[0.26em] text-white/40 after:absolute after:left-1/2 after:top-full after:mt-1 after:h-6 after:w-px after:-translate-x-1/2 after:bg-gradient-to-b after:from-white/35 after:to-transparent after:content-[''] sm:text-[11px] sm:tracking-[0.28em]">
+              Scroll down to see card stack
+            </span>
+          </p>
         </div>
       </div>
 
-      {/* Skiper-style scroll track: matches sample `main` padding + stacked `sticky top-0` rows */}
+      {/* Skiper-style scroll track: stacked `sticky top-0` rows */}
       <div
         ref={stackRef}
-        className="relative mx-auto flex w-full max-w-[1400px] flex-col items-center justify-center overflow-visible pb-[28vh] pt-[18vh] sm:pb-[36vh] sm:pt-[22vh] md:pb-[40vh] md:pt-[24vh]"
+        className="relative mx-auto flex w-full max-w-[1400px] flex-col items-center justify-center overflow-visible pb-[12vh] pt-[2vh] sm:pb-[16vh] sm:pt-[3vh] md:pb-[18vh] md:pt-[4vh]"
       >
-        <div className="pointer-events-none absolute left-1/2 top-[5%] z-[2] grid -translate-x-1/2 content-start justify-items-center gap-3 text-center sm:top-[6%]">
-          <span className="relative max-w-[14ch] text-[10px] font-medium uppercase leading-snug tracking-[0.26em] text-white/40 after:absolute after:left-1/2 after:top-full after:mt-1.5 after:h-10 after:w-px after:-translate-x-1/2 after:bg-gradient-to-b after:from-white/35 after:to-transparent after:content-[''] sm:text-xs sm:tracking-[0.28em]">
-            Scroll down to see card stack
-          </span>
-        </div>
-
         {ROLES.map((entry, i) => {
           const targetScale = Math.max(0.5, 1 - (total - i - 1) * 0.1);
           const range: [number, number] = [i * 0.25, 1];
@@ -313,7 +313,7 @@ export function ExperienceSection() {
           return (
             <div
               key={entry.index}
-              className="sticky top-0 flex min-h-[72svh] w-full items-center justify-center py-3 sm:min-h-[78svh] sm:py-4"
+              className="sticky top-0 flex min-h-[52svh] w-full items-center justify-center py-2 sm:min-h-[56svh] sm:py-3 lg:min-h-[58svh]"
               style={{ zIndex: 10 + i }}
             >
               <StickyExperienceCard i={i} entry={entry} progress={progress} range={range} targetScale={targetScale} />

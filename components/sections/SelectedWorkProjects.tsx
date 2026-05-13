@@ -26,93 +26,80 @@ type ProjectSlide = {
 
 const PROJECTS: ProjectSlide[] = [
   {
-    meta: "Personal OS / Web App / 2025",
-    title: "Portfolio 2025",
+    meta: "E‑commerce / Frontend / 2024",
+    title: "NauloMart",
     description:
-      "My interactive portfolio designed as a personal OS on the web. An evolving space where I regularly add new applications and features — always crafted with heart and attention to detail.",
+      "A full storefront experience with promo bar, search-first navigation, hero carousel, and category tiles — built for discovery, trust, and fast shopping flows on the web.",
     stats: [
-      { value: "5+", label: "Apps" },
-      { value: "3", label: "Easter eggs" },
+      { value: "6+", label: "Top categories" },
+      { value: "Live", label: "Production" },
     ],
-    tech: ["Next.js", "TypeScript", "GSAP", "Tailwind"],
-    image: "/images/hero-narrative-sketch.jpg",
-    imageAlt: "Portfolio workspace and screens",
-    href: SITE_GITHUB_URL,
-    codeHref: SITE_GITHUB_URL,
+    tech: ["Next.js", "React", "TypeScript", "Tailwind CSS"],
+    image: "/images/work-naulomart.png",
+    imageAlt: "NauloMart homepage with hero banner, search, and shop our top categories",
+    href: "https://naulomart.com",
+    codeHref: "https://github.com/overOP/NauloMart-Frontend",
     featured: true,
   },
   {
-    meta: "Product / SaaS / 2024",
-    title: "Commerce analytics surface",
+    meta: "Frontend / Motion / 2024",
+    title: "GTA 6 — React landing",
     description:
-      "Internal dashboards for storefront teams: cohort views, anomaly flags, and exportable reports with role-aware layouts.",
+      "A cinematic, Vice City–inspired marketing landing built in React with GSAP-driven motion: layered hero typography, scroll cues, and polished UI beats that echo Rockstar-style presentation.",
     stats: [
-      { value: "32%", label: "Fewer support tickets" },
-      { value: "4 mo", label: "Ship time" },
+      { value: "GSAP", label: "Animation core" },
+      { value: "Live", label: "Vercel deploy" },
     ],
-    tech: ["React", "Node", "Postgres", "AWS"],
-    image: "/images/lab-playground-bg.png",
-    imageAlt: "Abstract product UI mood",
-    href: SITE_GITHUB_URL,
-    codeHref: SITE_GITHUB_URL,
+    tech: ["React", "GSAP", "JavaScript", "Vercel"],
+    image: "/images/work-gta6-react.png",
+    imageAlt: "GTA 6 React landing hero with illustrated character and grand theft title typography",
+    href: "https://gta-6-react-js.vercel.app",
+    codeHref: "https://github.com/overOP/GTA-6-React.js",
   },
   {
-    meta: "ML / API / 2024",
-    title: "Model serving pipeline",
+    meta: "Frontend / E‑commerce UI / 2024",
+    title: "Amazon storefront clone",
     description:
-      "Versioned inference endpoints, warm pools, and tracing so research prototypes graduate to production without rework.",
+      "High-fidelity Amazon-style marketplace UI: navigation, category grids, hero promos, and responsive product modules — a focused frontend build deployed on Vercel.",
     stats: [
-      { value: "p99 <120ms", label: "Latency" },
-      { value: "3", label: "Regions" },
+      { value: "100+", label: "UI sections" },
+      { value: "Live", label: "Vercel deploy" },
     ],
-    tech: ["Python", "Docker", "FastAPI", "Redis"],
-    image: "/images/hero-circuit-silhouette.png",
-    imageAlt: "Circuit silhouette",
-    href: SITE_GITHUB_URL,
-    codeHref: SITE_GITHUB_URL,
+    tech: ["Next.js", "React", "Tailwind CSS", "Responsive"],
+    image: "/images/work-amazon-clone.png",
+    imageAlt: "Amazon-inspired storefront with category cards, hero banner, and product grids",
+    href: "https://amazon-responsible.vercel.app/",
+    codeHref: "https://github.com/overOP/Amazon-HTML",
   },
   {
-    meta: "Design system / 2023",
-    title: "Token-driven UI kit",
+    meta: "PERN stack / Social / 2024",
+    title: "Socially",
     description:
-      "Primitives, documentation, and Figma parity so product squads ship consistent interfaces without blocking on design for every screen.",
+      "A dark-mode social feed with auth, profiles, and posts — powered by a PERN backend and a Next.js + TypeScript client. Real-time feel via WebSockets for live updates and engagement on the feed.",
     stats: [
-      { value: "40+", label: "Components" },
-      { value: "2", label: "Themes" },
+      { value: "WS", label: "Live updates" },
+      { value: "Live", label: "Vercel deploy" },
     ],
-    tech: ["Storybook", "TypeScript", "CSS"],
-    image: "/images/hero-landing-geometry.png",
-    imageAlt: "Geometric UI motif",
-    href: SITE_GITHUB_URL,
-    codeHref: SITE_GITHUB_URL,
+    tech: ["Next.js", "TypeScript", "PostgreSQL", "Express", "Node.js", "WebSockets"],
+    image: "/images/work-socially-pern.png",
+    imageAlt: "Socially app dark UI with welcome card, sign in, and social feed posts",
+    href: "https://pern-socially-next-ts.vercel.app",
+    codeHref: "https://github.com/overOP/PERN-Socially-Next.ts",
   },
   {
-    meta: "Mobile / 2023",
-    title: "Field ops companion",
+    meta: "Education OS / Web / 2025",
+    title: "EXILE",
     description:
-      "Offline-first checklists and photo capture for technicians; sync resolves conflicts with server wins and audit trails.",
+      "Independent education OS for global admissions and migration — clear vision, audited metrics, and a premium dark UI that sells trust without agency commissions.",
     stats: [
-      { value: "99.2%", label: "Sync success" },
-      { value: "12k", label: "DAU peak" },
+      { value: "3,000+", label: "Students guided" },
+      { value: "48", label: "Countries reached" },
+      { value: "$0", label: "Agency fees" },
     ],
-    tech: ["React Native", "SQLite", "TS"],
-    image: "/images/hero-wireframe-astronaut.png",
-    imageAlt: "Wireframe illustration",
-    href: SITE_GITHUB_URL,
-  },
-  {
-    meta: "Open source / 2025",
-    title: "CLI productivity pack",
-    description:
-      "Small utilities for scaffolding repos, lint presets, and changelog generation — opinionated defaults with escape hatches.",
-    stats: [
-      { value: "1.2k", label: "Downloads/mo" },
-      { value: "MIT", label: "License" },
-    ],
-    tech: ["Node", "Vitest"],
-    image: "/images/hero-narrative-clocks.jpg",
-    imageAlt: "Narrative clocks artwork",
-    href: SITE_GITHUB_URL,
+    tech: ["Next.js", "TypeScript", "Tailwind CSS"],
+    image: "/images/work-exileos.png",
+    imageAlt: "EXILE landing page with hero typography, metrics card, and university names",
+    href: "https://exileos.com",
     codeHref: SITE_GITHUB_URL,
   },
 ];
@@ -159,7 +146,7 @@ const MD_QUERY = "(min-width: 768px)";
 
 function ProjectSlideBody({ project, slideIndex }: { project: ProjectSlide; slideIndex: number }) {
   return (
-    <div className="grid gap-10 pt-10 lg:grid-cols-2 lg:gap-14 lg:pt-14 xl:gap-20">
+    <div className="grid gap-10 pb-4 pt-10 lg:grid-cols-2 lg:gap-14 lg:pb-6 lg:pt-14 xl:gap-20">
       <div className="order-2 flex min-w-0 flex-col lg:order-1">
         <p className="inline-flex max-w-full border border-neutral-300 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-neutral-600 sm:text-[11px]">
           {project.meta}
@@ -220,7 +207,7 @@ function ProjectSlideBody({ project, slideIndex }: { project: ProjectSlide; slid
             alt={project.imageAlt}
             fill
             sizes="(max-width: 1024px) 100vw, 50vw"
-            className="object-cover"
+            className="object-contain"
             priority={slideIndex === 0}
           />
           {project.featured ? (
@@ -303,19 +290,27 @@ export function SelectedWorkProjects() {
       const mm = gsap.matchMedia();
 
       mm.add(MD_QUERY, () => {
-        setHorizontalActive(true);
+        const getTravel = () => Math.max(8, Math.ceil(track.scrollWidth - pin.clientWidth + 1));
 
-        const getTravel = () => Math.max(8, track.scrollWidth - pin.clientWidth);
+        /** At least one full viewport of scroll per slide transition, but never less than true horizontal travel. */
+        const getScrollSpan = () =>
+          Math.max(getTravel(), window.innerHeight * Math.max(1, total - 1));
 
         gsap.set(track, { x: 0, force3D: true });
 
-        const syncFromProgress = (progress: number) => {
-          cancelAnimationFrame(rafRef.current);
-          rafRef.current = requestAnimationFrame(() => {
+        const syncFromProgress = (progress: number, immediate = false) => {
+          const apply = () => {
             setScrollProgress(progress);
             const idx = Math.min(total - 1, Math.round(progress * Math.max(1, total - 1)));
             setIndex(idx);
-          });
+          };
+          if (immediate) {
+            cancelAnimationFrame(rafRef.current);
+            apply();
+            return;
+          }
+          cancelAnimationFrame(rafRef.current);
+          rafRef.current = requestAnimationFrame(apply);
         };
 
         const tween = gsap.to(track, {
@@ -326,16 +321,22 @@ export function SelectedWorkProjects() {
             id: SCROLL_TRIGGER_ID,
             trigger: pin,
             start: "top top",
-            end: () => `+=${getTravel()}`,
+            end: () => `+=${getScrollSpan()}`,
             scrub: 0.55,
             pin: true,
             pinSpacing: true,
-            anticipatePin: 1,
+            anticipatePin: 0,
             invalidateOnRefresh: true,
             onUpdate: (self) => syncFromProgress(self.progress),
-            onRefresh: (self) => syncFromProgress(self.progress),
+            onRefresh: (self) => syncFromProgress(self.progress, true),
           },
         });
+
+        const st = tween.scrollTrigger;
+        if (st) {
+          syncFromProgress(st.progress, true);
+        }
+        setHorizontalActive(true);
 
         const ro = new ResizeObserver(() => {
           ScrollTrigger.refresh();
@@ -400,13 +401,13 @@ export function SelectedWorkProjects() {
     };
   }, [total]);
 
-  const displayProgress = horizontalActive ? scrollProgress : (index + 1) / total;
+  const displayProgress = horizontalActive ? scrollProgress : index / Math.max(1, total - 1);
   const pctLabel = Math.round(displayProgress * 100);
   const barWidth = displayProgress * 100;
 
   return (
     <section
-      className="relative overflow-hidden bg-white px-4 pb-[max(4rem,10vh)] pt-[max(3rem,8vh)] text-neutral-900 sm:px-8 sm:pb-[14vh] sm:pt-[10vh] md:px-8 md:pb-0 md:pt-0 lg:px-16"
+      className="relative overflow-hidden bg-white px-4 pb-8 pt-[max(3rem,8vh)] text-neutral-900 sm:px-8 sm:pb-10 sm:pt-[10vh] md:px-8 md:pb-6 md:pt-6 lg:px-16"
       aria-labelledby="selected-work-heading"
     >
       <h2 id="selected-work-heading" className="sr-only">
@@ -418,9 +419,23 @@ export function SelectedWorkProjects() {
         aria-hidden
       />
 
-      {/* md+: pin + horizontal track; <md: natural stack */}
-      <div ref={pinRef} className="relative z-[1] md:flex md:min-h-[100dvh] md:flex-col md:overflow-hidden">
-        <div className="mx-auto flex min-h-0 w-full max-w-[1400px] flex-1 flex-col px-4 pb-[max(4rem,10vh)] pt-[max(3rem,8vh)] md:min-h-0 md:px-8 md:pb-10 md:pt-10 lg:px-6 lg:pb-12 lg:pt-12">
+      {/*
+        Selected work — scroll-scrubbed horizontal strip (md+).
+
+        • pinRef: ScrollTrigger `pin: true` attaches here. GSAP wraps this node and injects
+          a `.pin-spacer.pin-spacer-selected-work-horizontal` sibling: tall wrapper + bottom
+          padding so the page scroll length matches the horizontal scrub (that spacer is not
+          in JSX; you see it in DevTools as the “huge” white block while pinned).
+
+        • trackRef: flex row of full-width slides; GSAP animates `transform: translateX(...)`
+          against vertical scroll progress.
+
+        • Non-active slides get `pointer-events-none` so “View project” hits the visible slide.
+
+        • Progress bar: Start / % / End mirrors the same scrub progress.
+      */}
+      <div ref={pinRef} className="relative z-[1] md:flex md:min-h-0 md:flex-col md:overflow-hidden">
+        <div className="mx-auto flex w-full max-w-[1400px] flex-col px-4 pb-6 pt-[max(3rem,8vh)] md:min-h-0 md:px-8 md:pb-6 md:pt-8 lg:px-6 lg:pb-8 lg:pt-10">
           <header className="flex shrink-0 flex-wrap items-start justify-between gap-6 border-b border-neutral-200 pb-8 sm:pb-10">
             <div className="inline-flex items-center gap-2.5 border border-[#E32119] px-3 py-2 sm:px-3.5 sm:py-2.5">
               <span className="text-[#E32119]" aria-hidden>
@@ -468,17 +483,19 @@ export function SelectedWorkProjects() {
             </div>
           </header>
 
-          <div className="relative mt-2 min-h-[min(56vh,520px)] flex-1 overflow-hidden md:min-h-0 md:flex-1">
+          <div className="relative mt-2 min-h-[min(56vh,520px)] overflow-hidden md:min-h-0">
             <div
               ref={trackRef}
-              className="flex will-change-transform max-md:flex-col max-md:gap-20 md:absolute md:inset-0 md:flex-row md:flex-nowrap"
+              className="flex will-change-transform max-md:flex-col max-md:gap-20 md:flex-row md:flex-nowrap"
             >
               {PROJECTS.map((p, slideIndex) => (
                 <article
                   key={p.title}
                   data-project-slide
                   data-slide-index={slideIndex}
-                  className="w-full shrink-0 md:flex-[0_0_100%] md:overflow-y-auto md:overflow-x-hidden md:pr-1 md:[-webkit-overflow-scrolling:touch]"
+                  className={`w-full shrink-0 md:flex-[0_0_100%] md:overflow-x-hidden md:pr-1 ${
+                    horizontalActive && index !== slideIndex ? "pointer-events-none" : ""
+                  }`}
                   {...(horizontalActive && index !== slideIndex ? { "aria-hidden": true } : {})}
                 >
                   <ProjectSlideBody project={p} slideIndex={slideIndex} />
@@ -487,7 +504,7 @@ export function SelectedWorkProjects() {
             </div>
           </div>
 
-          <div className="mt-12 shrink-0 border border-neutral-200 sm:mt-8 md:mt-6">
+          <div className="mt-8 shrink-0 border border-neutral-200 sm:mt-6 md:mt-4">
             <div className="flex items-center justify-between gap-3 px-3 py-2.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-neutral-500 sm:px-4 sm:text-[11px]">
               <span>Start</span>
               <span className="tabular-nums text-neutral-800">{pctLabel}%</span>

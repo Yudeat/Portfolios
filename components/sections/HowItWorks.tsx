@@ -97,7 +97,7 @@ function StepFrame({ accent, children }: { accent: boolean; children: ReactNode 
 export function HowItWorks() {
   return (
     <section
-      className="flex min-h-0 flex-col justify-center bg-white px-4 py-[max(10vh,4rem)] text-[#101116] sm:px-10 sm:py-[14vh] lg:px-16"
+      className="flex min-h-0 flex-col justify-center bg-white px-4 py-8 text-[#101116] sm:px-10 sm:py-10 lg:px-16"
       aria-labelledby="how-it-works-heading"
     >
       <div className="mx-auto w-full max-w-7xl text-center">
@@ -115,7 +115,7 @@ export function HowItWorks() {
         </p>
       </div>
 
-      <div className="mx-auto mt-14 grid w-full max-w-7xl gap-10 sm:mt-16 sm:grid-cols-2 lg:mt-20 lg:grid-cols-4 lg:gap-6 xl:gap-8">
+      <div className="mx-auto mt-10 grid w-full max-w-7xl gap-8 sm:mt-12 sm:grid-cols-2 lg:mt-14 lg:grid-cols-4 lg:gap-6 xl:gap-8">
         {STEPS.map((step) => (
           <StepFrame key={step.id} accent={step.accent}>
             <div className="flex flex-col items-center text-center">
