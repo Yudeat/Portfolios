@@ -201,7 +201,7 @@ export function SplitScreenNav({
           aria-label="Close navigation"
           disabled={!isOpen}
           onClick={onClose}
-          className="absolute inset-0 z-0 cursor-pointer border-none bg-black/60 backdrop-blur-md transition-[background-color] hover:bg-black/65 motion-reduce:backdrop-blur-sm sm:bg-black/55 sm:hover:bg-black/60"
+          className="absolute inset-0 z-0 cursor-pointer border-none bg-[#2c2825]/50 backdrop-blur-md transition-[background-color] hover:bg-[#2c2825]/55 motion-reduce:backdrop-blur-sm sm:bg-[#2c2825]/45 sm:hover:bg-[#2c2825]/52"
         />
 
         <aside
@@ -210,10 +210,10 @@ export function SplitScreenNav({
           aria-modal="true"
           aria-labelledby={titleId}
           {...(!isOpen ? { "aria-hidden": true as const } : {})}
-          className="absolute inset-y-0 right-0 z-[2] flex h-full min-h-0 w-full min-w-0 max-w-[100vw] flex-col overflow-y-auto overflow-x-hidden bg-[#050505] px-4 py-6 shadow-[-12px_0_48px_rgba(0,0,0,0.45)] sm:max-w-[min(100vw,26rem)] sm:px-7 sm:py-9 md:max-w-[min(100vw,28rem)] md:px-8 md:py-10 lg:max-w-[min(100vw,34rem)] xl:max-w-[min(100vw,36rem)]"
+          className="absolute inset-y-0 right-0 z-[2] flex h-full min-h-0 w-full min-w-0 max-w-[100vw] flex-col overflow-y-auto overflow-x-hidden border-l border-[#101116]/10 bg-[#f4f1eb] px-4 py-6 text-[#101116] shadow-[-16px_0_56px_rgba(28,24,20,0.14)] [background-image:linear-gradient(180deg,rgba(255,255,255,0.55)_0%,transparent_38%),linear-gradient(90deg,rgba(92,72,48,0.04)_1px,transparent_1px),linear-gradient(180deg,rgba(92,72,48,0.035)_1px,transparent_1px)] [background-size:auto,22px_22px,22px_22px] sm:max-w-[min(100vw,26rem)] sm:px-7 sm:py-9 md:max-w-[min(100vw,28rem)] md:px-8 md:py-10 lg:max-w-[min(100vw,34rem)] xl:max-w-[min(100vw,36rem)]"
         >
-          <div className="flex shrink-0 items-start justify-between gap-3 border-b border-white/10 pb-5 sm:pb-6">
-            <p id={titleId} className="text-[11px] font-medium uppercase tracking-[0.26em] text-white/42">
+          <div className="flex shrink-0 items-start justify-between gap-3 border-b border-[#101116]/12 pb-5 sm:pb-6">
+            <p id={titleId} className="text-[11px] font-medium uppercase tracking-[0.26em] text-[#101116]/48">
               Menu
             </p>
             <button
@@ -221,14 +221,14 @@ export function SplitScreenNav({
               type="button"
               aria-label="Close menu"
               onClick={onClose}
-              className="flex size-10 shrink-0 items-center justify-center rounded-[10px] border border-white/25 text-lg font-light text-white/90 transition-[background-color,color] hover:bg-white/10 hover:text-white sm:size-11 sm:text-xl"
+              className="flex size-10 shrink-0 items-center justify-center rounded-[10px] border border-[#101116]/18 bg-[#faf8f4]/80 text-lg font-light text-[#101116]/90 transition-[background-color,color,border-color] hover:border-[#101116]/28 hover:bg-[#efe8dc] sm:size-11 sm:text-xl"
             >
               ×
             </button>
           </div>
 
           <nav
-            className="flex min-h-0 flex-1 flex-col gap-0 border-b border-white/10 py-8 sm:py-10"
+            className="flex min-h-0 flex-1 flex-col gap-0 border-b border-[#101116]/12 py-8 sm:py-10"
             aria-label="Primary"
           >
             {MENU_LINKS.map((item) => (
@@ -240,17 +240,17 @@ export function SplitScreenNav({
                   deferPanelScrollTriggerRefreshRef.current = true;
                 }}
                 onClick={onClose}
-                className="split-nav-link group flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-1 py-3.5 text-[clamp(1.2rem,5.2vw,2.85rem)] font-semibold uppercase leading-[1.05] tracking-[-0.02em] text-white no-underline sm:gap-3 sm:py-4 sm:leading-none sm:text-[clamp(1.35rem,3.6vw,2.75rem)] md:text-[clamp(1.45rem,3.2vw,2.85rem)]"
+                className="split-nav-link group flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-1 py-3.5 text-[clamp(1.2rem,5.2vw,2.85rem)] font-semibold uppercase leading-[1.05] tracking-[-0.02em] text-[#101116] no-underline sm:gap-3 sm:py-4 sm:leading-none sm:text-[clamp(1.35rem,3.6vw,2.75rem)] md:text-[clamp(1.45rem,3.2vw,2.85rem)]"
               >
                 <span>{item.label}</span>
                 {typeof item.count === "number" && (
-                  <span className="text-[0.68em] font-medium text-white/42 transition-colors group-hover:text-white/72 sm:text-[0.72em]">
+                  <span className="text-[0.68em] font-medium text-[#101116]/42 transition-colors group-hover:text-[#101116]/68 sm:text-[0.72em]">
                     [{item.count}]
                   </span>
                 )}
                 <span
                   aria-hidden
-                  className="ml-auto hidden shrink-0 text-white/40 opacity-0 transition-all duration-300 ease-out group-hover:translate-x-0.5 group-hover:opacity-100 group-hover:text-[#93b4ff] min-[380px]:inline-flex"
+                  className="ml-auto hidden shrink-0 text-[#101116]/35 opacity-0 transition-all duration-300 ease-out group-hover:translate-x-0.5 group-hover:opacity-100 group-hover:text-[#3d5a8a] min-[380px]:inline-flex"
                 >
                   →
                 </span>
@@ -258,17 +258,17 @@ export function SplitScreenNav({
             ))}
           </nav>
 
-          <section className="border-b border-white/10 py-8 sm:py-10">
-            <p className="text-[10px] font-medium uppercase tracking-[0.24em] text-white/42 sm:text-[11px] sm:tracking-[0.26em]">
+          <section className="border-b border-[#101116]/12 py-8 sm:py-10">
+            <p className="text-[10px] font-medium uppercase tracking-[0.24em] text-[#101116]/48 sm:text-[11px] sm:tracking-[0.26em]">
               Let&apos;s talk
             </p>
             <Link
               href="mailto:predeep@example.com"
               onClick={onClose}
-              className="split-nav-contact group mt-3 block min-w-0 break-words text-[clamp(0.95rem,3.8vw,1.55rem)] font-semibold uppercase tracking-[0.06em] text-white underline decoration-white/35 decoration-2 underline-offset-[0.35em] transition-all hover:text-[#93b4ff] hover:decoration-[#93b4ff] sm:mt-4 sm:tracking-[0.08em] sm:text-[clamp(1.05rem,2.2vw,1.65rem)] sm:underline-offset-8"
+              className="split-nav-contact group mt-3 block min-w-0 break-words text-[clamp(0.95rem,3.8vw,1.55rem)] font-semibold uppercase tracking-[0.06em] text-[#101116] underline decoration-[#101116]/28 decoration-2 underline-offset-[0.35em] transition-all hover:text-[#3d5a8a] hover:decoration-[#3d5a8a]/55 sm:mt-4 sm:tracking-[0.08em] sm:text-[clamp(1.05rem,2.2vw,1.65rem)] sm:underline-offset-8"
             >
               predeep@example.com
-              <span className="inline-block pl-2 text-white/50 transition-colors group-hover:text-[#93b4ff]" aria-hidden>
+              <span className="inline-block pl-2 text-[#101116]/45 transition-colors group-hover:text-[#3d5a8a]" aria-hidden>
                 +
               </span>
             </Link>
@@ -276,7 +276,7 @@ export function SplitScreenNav({
 
           <footer className="mt-auto flex shrink-0 flex-col gap-5 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-6 sm:gap-6 sm:pt-8">
             <div>
-              <p className="text-[10px] font-medium uppercase tracking-[0.24em] text-white/42 sm:text-[11px] sm:tracking-[0.26em]">
+              <p className="text-[10px] font-medium uppercase tracking-[0.24em] text-[#101116]/48 sm:text-[11px] sm:tracking-[0.26em]">
                 Socials
               </p>
               <div className="mt-3 flex flex-wrap gap-x-4 gap-y-3 sm:mt-4 sm:gap-5">
@@ -290,21 +290,21 @@ export function SplitScreenNav({
                     href={s.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-xs font-semibold uppercase tracking-[0.12em] text-white/70 underline-offset-4 transition-colors hover:text-white sm:text-sm sm:tracking-[0.14em]"
+                    className="text-xs font-semibold uppercase tracking-[0.12em] text-[#101116]/65 underline-offset-4 transition-colors hover:text-[#101116] sm:text-sm sm:tracking-[0.14em]"
                   >
                     {s.label}
                   </a>
                 ))}
               </div>
             </div>
-            <div className="flex flex-col gap-2 text-[10px] uppercase tracking-[0.12em] text-white/52 min-[400px]:flex-row min-[400px]:flex-wrap min-[400px]:items-center min-[400px]:gap-x-4 min-[400px]:gap-y-2 sm:gap-x-6 sm:text-[11px] sm:tracking-[0.14em]">
-              <a href="#" className="transition-colors hover:text-white">
+            <div className="flex flex-col gap-2 text-[10px] uppercase tracking-[0.12em] text-[#101116]/48 min-[400px]:flex-row min-[400px]:flex-wrap min-[400px]:items-center min-[400px]:gap-x-4 min-[400px]:gap-y-2 sm:gap-x-6 sm:text-[11px] sm:tracking-[0.14em]">
+              <a href="#" className="transition-colors hover:text-[#101116]">
                 Privacy Policy ↗
               </a>
-              <a href="#" className="transition-colors hover:text-white">
+              <a href="#" className="transition-colors hover:text-[#101116]">
                 Terms of Service ↗
               </a>
-              <span className="ml-auto text-white/40">© {new Date().getFullYear()}</span>
+              <span className="ml-auto text-[#101116]/38">© {new Date().getFullYear()}</span>
             </div>
           </footer>
         </aside>
