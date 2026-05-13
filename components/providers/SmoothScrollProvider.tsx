@@ -28,13 +28,15 @@ export function SmoothScrollProvider({ children }: PropsWithChildren) {
   useEffect(() => {
     const instance = new Lenis({
       smoothWheel: true,
-      /** Lower lerp + multiplier gives the whole site a softer, less jumpy scroll feel. */
-      lerp: 0.052,
-      wheelMultiplier: 0.74,
+      /** Lets wheel chain to real overflow regions (hero about panel, project slides, etc.). */
+      allowNestedScroll: true,
+      /** Slightly higher lerp + wheelMultiplier = less “heavy” travel (esp. long hero pin). */
+      lerp: 0.078,
+      wheelMultiplier: 0.92,
       /** Smooth vertical momentum on touch devices while staying synced with GSAP. */
       syncTouch: true,
-      syncTouchLerp: 0.06,
-      touchMultiplier: 0.9,
+      syncTouchLerp: 0.085,
+      touchMultiplier: 0.95,
     });
 
     const onScroll = () => ScrollTrigger.update();

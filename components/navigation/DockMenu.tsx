@@ -29,17 +29,16 @@ function IconHome({ className }: { className?: string }) {
   );
 }
 
-function IconPhilosophy({ className }: { className?: string }) {
+function IconProjects({ className }: { className?: string }) {
   return (
     <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
       <path
-        d="M12 3a7 7 0 0 0-2 13.74V20h4v-3.26A7 7 0 0 0 12 3Z"
+        d="M4 7h16v12H4V7Z"
         stroke="currentColor"
         strokeWidth="1.35"
-        strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <path d="M9 20h6" stroke="currentColor" strokeWidth="1.35" strokeLinecap="round" />
+      <path d="M4 7V5a2 2 0 0 1 2-2h5l2 2h7v2" stroke="currentColor" strokeWidth="1.35" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -93,9 +92,9 @@ function IconClose({ className }: { className?: string }) {
 
 const DOCK_ITEMS: DockItem[] = [
   { id: "hero", href: "/#hero", label: "Home", icon: IconHome },
-  { id: "philosophy", href: "/#philosophy", label: "Philosophy", icon: IconPhilosophy },
+  { id: "projects", href: "/#projects", label: "Projects", icon: IconProjects },
   { id: "how-it-works", href: "/#how-it-works", label: "How it works", icon: IconHowItWorks },
-  { id: "work", href: "/#work", label: "Work", icon: IconWork },
+  { id: "work", href: "/#work", label: "Skills", icon: IconWork },
   { id: "contact", href: "/#contact", label: "Contact", icon: IconContact },
 ];
 

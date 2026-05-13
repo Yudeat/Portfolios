@@ -11,9 +11,11 @@ gsap.registerPlugin(useGSAP, SplitText, ScrollTrigger);
 type LensHeadingProps = {
   text: string;
   className?: string;
+  /** When the heading animation should start relative to the viewport (default was too late vs hero pin). */
+  scrollTriggerStart?: string;
 };
 
-export function LensHeading({ text, className }: LensHeadingProps) {
+export function LensHeading({ text, className, scrollTriggerStart = "top 82%" }: LensHeadingProps) {
   const headingRef = useRef<HTMLHeadingElement>(null);
 
   useGSAP(() => {
@@ -40,13 +42,13 @@ export function LensHeading({ text, className }: LensHeadingProps) {
       ease: "power3.out",
       scrollTrigger: {
         trigger: headingRef.current,
-        start: "top 82%",
+        start: scrollTriggerStart,
         toggleActions: "play none none reverse",
       },
     });
 
     return () => split.revert();
-  }, []);
+  }, [scrollTriggerStart]);
 
   return (
     <h2 ref={headingRef} className={className}>

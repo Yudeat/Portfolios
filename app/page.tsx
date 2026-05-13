@@ -1,6 +1,6 @@
 import { Hero } from "@/components/sections/Hero";
-import { NarrativeHorizontalScroll } from "@/components/narrative/NarrativeHorizontalScroll";
-import { Philosophy } from "@/components/sections/Philosophy";
+import { SkillsExpertiseSection } from "@/components/sections/SkillsExpertiseSection";
+import { SelectedWorkProjects } from "@/components/sections/SelectedWorkProjects";
 import { HowItWorks } from "@/components/sections/HowItWorks";
 import { SiteFooter } from "@/components/sections/SiteFooter";
 import { StackCard } from "@/components/layout/StackCard";
@@ -10,16 +10,20 @@ export default function Home() {
     <main className="min-w-0 overflow-x-clip bg-[#050505]">
       <Hero />
 
-      <StackCard id="philosophy" stackIndex={1} className="scroll-mt-20 bg-[#050505]">
-        <Philosophy />
+      <StackCard
+        id="projects"
+        stackIndex={1}
+        className="-mt-[min(44vh,520px)] scroll-mt-20 bg-white"
+      >
+        <SelectedWorkProjects />
       </StackCard>
 
       <StackCard id="how-it-works" stackIndex={2} className="scroll-mt-20 bg-white">
         <HowItWorks />
       </StackCard>
 
-      <StackCard id="work" stackIndex={3} className="scroll-mt-20 bg-[#070707]">
-        <NarrativeHorizontalScroll />
+      <StackCard id="work" stackIndex={3} sticky={false} className="scroll-mt-20 bg-[#060606]">
+        <SkillsExpertiseSection />
       </StackCard>
 
       <StackCard id="contact" stackIndex={4} className="bg-white">

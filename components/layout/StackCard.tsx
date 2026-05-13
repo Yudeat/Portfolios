@@ -7,6 +7,11 @@ export type StackCardProps = PropsWithChildren<{
   /** Larger index stacks visually above earlier cards (sticky + z-index). */
   stackIndex?: number;
   className?: string;
+  /**
+   * Long in-flow sections (e.g. Skills) should use `false` so the full block height
+   * contributes to document scroll; sticky stacks can otherwise feel “stuck” mid-section.
+   */
+  sticky?: boolean;
   /** Use false when the block is intentionally shorter than a full viewport card. */
   fillViewport?: boolean;
   /**
@@ -33,17 +38,20 @@ export function StackCard({
   id,
   stackIndex = 1,
   className,
+  sticky = true,
   fillViewport = true,
   minHeightClass,
 }: StackCardProps) {
   const zClass = STACK_Z[stackIndex] ?? "z-[96]";
   const minH =
     minHeightClass ?? (fillViewport ? "min-h-[100dvh]" : "min-h-[min(100dvh,920px)]");
+  const position = sticky ? "sticky top-0" : "relative";
   return (
     <div
       id={id}
       className={[
-        "sticky top-0 w-full shadow-[0_-28px_64px_-18px_rgba(0,0,0,0.55)]",
+        position,
+        "w-full shadow-[0_-28px_64px_-18px_rgba(0,0,0,0.55)]",
         minH,
         zClass,
         className ?? "",

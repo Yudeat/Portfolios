@@ -21,7 +21,7 @@ export function AboutScrapbookThreeBackdrop() {
   }, []);
 
   return (
-    <div className="pointer-events-none absolute inset-0 z-0 min-h-[220vh] w-full overflow-hidden" aria-hidden>
+    <div className="pointer-events-none absolute inset-0 z-0 min-h-full w-full overflow-hidden" aria-hidden>
       <Canvas
         className="!absolute inset-0 h-full w-full touch-none"
         camera={{ position: [-0.55, 0.2, 10], fov: 42, near: 0.1, far: 60 }}

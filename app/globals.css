@@ -20,6 +20,19 @@ body {
   overflow-x: clip;
 }
 
+/* Hide all scrollbars site-wide; wheel / touch / programmatic scroll still works */
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+*::-webkit-scrollbar,
+*::-webkit-scrollbar-corner {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

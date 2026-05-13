@@ -5,7 +5,6 @@ import { useNavMenu } from "@/components/providers/NavMenuProvider";
 import { useLenis } from "@/components/providers/SmoothScrollProvider";
 import { LanyardBadge } from "@/components/ui/LanyardBadge";
 import { HeroAboutScrapbook } from "@/components/sections/HeroAboutScrapbook";
-import { HeroExperiences } from "@/components/sections/HeroExperiences";
 import { HeroLandingAmbient } from "@/components/sections/HeroLandingAmbient";
 import { TypewriterText } from "@/components/ui/TypewriterText";
 import gsap from "gsap";
@@ -19,30 +18,33 @@ const LANDING_HEADLINE_FOCUS = "Full-Stack Innovation";
 const LANDING_SUB =
   "High-performance systems and user-centric storytelling designed to convert intent into outcomes.";
 
-/** Long pin so intro + 3 experience “beats” + exit each get enough scroll distance. */
-const PIN_SCROLL_PX = 10_500;
+/** Pin scroll distance — shorter = fewer wheel turns through the landing story. */
+const PIN_SCROLL_PX = 1450;
 
-/** Left peek per layer for the three in-hero “cards” (ambient → landing → about), right-aligned deck. */
+/** Left peek per layer for the hero deck (ambient → landing; about is the top card). */
 const HERO_DECK_STEP_REM = 3.25;
 
 /** About scrapbook slides over editorial landing (scrub timeline beats). */
-const PHILOSOPHY_CARD_START = 14;
-const PHILOSOPHY_CARD_DURATION = 26;
+const PHILOSOPHY_CARD_START = 8;
+const PHILOSOPHY_CARD_DURATION = 14;
 
-/** Crossfade About → Experiences (same scroll window so landing does not flash through). */
-const PHIL_PAGE_EXIT_START = 74;
-const PHIL_PAGE_EXIT_DURATION = 22;
+/** Scroll hint fades out early so the deck motion owns the scroll. */
+const SCROLL_CUE_FADE_START = 10;
+const SCROLL_CUE_FADE_DURATION = 12;
 
-/**
- * Timeline “time” bounds for the pinned hero scrub (see useGSAP).
- * While time is in [EXPERIENCE_PAGE_ZONE_START, EXPERIENCE_PAGE_ZONE_END), scrolling advances ML → Web → Manager (equal thirds).
- * After that, experiences exit and the document continues to the sections below.
- */
-const EXPERIENCE_PAGE_ZONE_START = 96;
-const EXPERIENCE_PAGE_ZONE_END = 210;
+/** About panel: translate first, then fade — avoids “all layers at 0 opacity” at once. */
+const ABOUT_EXIT_START = 34;
+const ABOUT_EXIT_MOVE_DURATION = 4;
+const ABOUT_EXIT_FADE_DURATION = 2;
 
-const EXPERIENCES_EXIT_START = 210;
-const EXPERIENCES_EXIT_DURATION = 22;
+/** Slight lag vs about motion — landing/ambient still read while the white panel travels. */
+const AMBIENT_LANDING_FADE_START = 36;
+const AMBIENT_LANDING_FADE_DURATION = 6;
+
+/** Subtle shell wash during exit (same endpoints as body bg — no hard cut to void). */
+const HERO_BG_WASH_START = ABOUT_EXIT_START;
+const HERO_BG_WASH_IN = 3;
+const HERO_BG_WASH_OUT = 3;
 
 const ScrollDownCue = forwardRef<HTMLDivElement>(function ScrollDownCue(_, ref) {
   const lenis = useLenis();
@@ -88,133 +90,107 @@ export function Hero() {
   const { open } = useNavMenu();
   /** 0 lead → 1 focus phrase → 2 headline done → 3 body typed */
   const [landingTextStep, setLandingTextStep] = useState(0);
-  /** Scrubbed 0→3 over the experience zone: each integer step stacks the next card (see HeroExperiences). */
-  const [experiencePageProgress, setExperiencePageProgress] = useState(0);
 
   const sectionRef = useRef<HTMLElement>(null);
   const pinWrapRef = useRef<HTMLDivElement>(null);
   const ambientRef = useRef<HTMLDivElement>(null);
   const landingInnovationRef = useRef<HTMLDivElement>(null);
   const philosophyPageRef = useRef<HTMLDivElement>(null);
-  const experiencesPageRef = useRef<HTMLDivElement>(null);
   const lanyardContainerRef = useRef<HTMLDivElement>(null);
   const scrollCueRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
       const scrollRoot = pinWrapRef.current;
+      const shell = sectionRef.current;
       const ambient = ambientRef.current;
       const landingInnovation = landingInnovationRef.current;
       const philosophyPage = philosophyPageRef.current;
-      const experiencesPage = experiencesPageRef.current;
       const lanyardContainer = lanyardContainerRef.current;
       const scrollCue = scrollCueRef.current;
 
       if (
         !scrollRoot ||
+        !shell ||
         !ambient ||
         !landingInnovation ||
         !philosophyPage ||
-        !experiencesPage ||
         !lanyardContainer ||
         !scrollCue
       ) {
         return;
       }
 
+      gsap.set(shell, { backgroundColor: "#050505" });
       gsap.set(ambient, { autoAlpha: 1 });
       gsap.set(landingInnovation, { autoAlpha: 1 });
       gsap.set(lanyardContainer, { autoAlpha: 1 });
       gsap.set(philosophyPage, { x: "100%", autoAlpha: 1, force3D: true });
-      gsap.set(experiencesPage, { autoAlpha: 0, x: "0%", force3D: true });
       gsap.set(scrollCue, { autoAlpha: 1 });
 
-      let tl: gsap.core.Timeline;
-      let rafId: number | null = null;
-      let latestProgress = 0;
-
-      const syncExperiencePageFromTimeline = () => {
-        const time = tl.time();
-        let progress = 0;
-        if (time < EXPERIENCE_PAGE_ZONE_START) {
-          progress = 0;
-        } else if (time >= EXPERIENCE_PAGE_ZONE_END) {
-          progress = 3;
-        } else {
-          const span = EXPERIENCE_PAGE_ZONE_END - EXPERIENCE_PAGE_ZONE_START;
-          progress = span > 0 ? ((time - EXPERIENCE_PAGE_ZONE_START) / span) * 3 : 0;
-        }
-        latestProgress = progress;
-        if (rafId == null) {
-          rafId = requestAnimationFrame(() => {
-            rafId = null;
-            setExperiencePageProgress(latestProgress);
-          });
-        }
-      };
-
-      tl = gsap.timeline({
+      const tl = gsap.timeline({
         defaults: { ease: "none" },
         scrollTrigger: {
+          id: "hero-pin",
           trigger: scrollRoot,
           start: "top top",
           end: `+=${PIN_SCROLL_PX}`,
           pin: true,
           pinSpacing: true,
-          scrub: 1,
+          /** `scrub: 1` lagged ~1s behind scroll — felt like dead air after the About layer. */
+          scrub: true,
           invalidateOnRefresh: true,
-          /** Scrubbed timelines often skip `timeline` onUpdate; ScrollTrigger is authoritative. */
-          onUpdate: syncExperiencePageFromTimeline,
+          anticipatePin: 1,
         },
       });
 
-      tl.to(scrollCue, { autoAlpha: 0, duration: 22 }, 16);
+      tl.addLabel("scrollCueFade", SCROLL_CUE_FADE_START);
+      tl.to(scrollCue, { autoAlpha: 0, duration: SCROLL_CUE_FADE_DURATION }, "scrollCueFade");
 
+      tl.addLabel("aboutEnter", PHILOSOPHY_CARD_START);
       tl.fromTo(
         philosophyPage,
         { x: "100%" },
-        { x: "0%", duration: PHILOSOPHY_CARD_DURATION },
-        PHILOSOPHY_CARD_START,
+        { x: "0%", duration: PHILOSOPHY_CARD_DURATION, ease: "power1.out" },
+        "aboutEnter",
       );
 
+      tl.addLabel("aboutExit", ABOUT_EXIT_START);
       tl.to(
         philosophyPage,
-        { autoAlpha: 0, x: "100%", duration: PHIL_PAGE_EXIT_DURATION },
-        PHIL_PAGE_EXIT_START,
+        { x: "100%", duration: ABOUT_EXIT_MOVE_DURATION, ease: "power2.in" },
+        "aboutExit",
       );
-
-      tl.fromTo(
-        experiencesPage,
-        { autoAlpha: 0 },
-        { autoAlpha: 1, duration: PHIL_PAGE_EXIT_DURATION },
-        PHIL_PAGE_EXIT_START,
+      tl.to(
+        philosophyPage,
+        { autoAlpha: 0, duration: ABOUT_EXIT_FADE_DURATION, ease: "none" },
+        ABOUT_EXIT_START + ABOUT_EXIT_MOVE_DURATION,
       );
 
       tl.to(
-        experiencesPage,
-        { autoAlpha: 0, x: "100%", duration: EXPERIENCES_EXIT_DURATION },
-        EXPERIENCES_EXIT_START,
+        shell,
+        { backgroundColor: "#0f1624", duration: HERO_BG_WASH_IN, ease: "sine.inOut" },
+        HERO_BG_WASH_START,
+      );
+      tl.to(
+        shell,
+        { backgroundColor: "#050505", duration: HERO_BG_WASH_OUT, ease: "sine.inOut" },
+        HERO_BG_WASH_START + HERO_BG_WASH_IN,
       );
 
-      /** Hide landing + ambient during Experiences exit so the editorial hero does not reappear before #philosophy. */
-      tl.to(ambient, { autoAlpha: 0, duration: EXPERIENCES_EXIT_DURATION }, EXPERIENCES_EXIT_START);
-      tl.to(landingInnovation, { autoAlpha: 0, duration: EXPERIENCES_EXIT_DURATION }, EXPERIENCES_EXIT_START);
+      tl.addLabel("ambientLandingFade", AMBIENT_LANDING_FADE_START);
+      tl.to(ambient, { autoAlpha: 0, duration: AMBIENT_LANDING_FADE_DURATION }, "ambientLandingFade");
+      tl.to(landingInnovation, { autoAlpha: 0, duration: AMBIENT_LANDING_FADE_DURATION }, "ambientLandingFade");
+      tl.to(lanyardContainer, { autoAlpha: 0, duration: AMBIENT_LANDING_FADE_DURATION * 0.85 }, "ambientLandingFade");
 
-      syncExperiencePageFromTimeline();
-
-      return () => {
-        if (rafId != null) {
-          cancelAnimationFrame(rafId);
-          rafId = null;
-        }
-      };
+      return () => {};
     },
     { revertOnUpdate: true },
   );
 
   return (
     <section id="hero" ref={sectionRef} className="relative z-0 min-h-[100dvh] overflow-hidden bg-[#050505]">
-      <div ref={pinWrapRef} className="relative h-screen min-h-[100dvh] w-full min-w-0 overflow-hidden">
+      <div ref={pinWrapRef} className="relative h-[100dvh] min-h-[100dvh] w-full min-w-0 overflow-hidden">
         {/* Card 1 — full-bleed ambient (back of deck) */}
         <div ref={ambientRef} className="absolute inset-0 z-[4]">
           <HeroLandingAmbient />
@@ -283,23 +259,17 @@ export function Hero() {
           </div>
         </div>
 
-        {/* Experiences sits under About (z-22) until crossfade; pointer-events hit About first while it is visible */}
-        <div
-          ref={experiencesPageRef}
-          className="pointer-events-auto absolute inset-0 z-[20] flex min-h-0 flex-col overflow-hidden bg-[#8B004A] will-change-transform"
-        >
-          <HeroExperiences pageProgress={experiencePageProgress} />
-        </div>
-
-        {/* Card 3 — about scrapbook: narrowest layer, slides in from the right */}
+        {/* Card 3 — about scrapbook: GSAP slides the shell; no inner scroll (page scroll only). */}
         <div
           ref={philosophyPageRef}
-          className="pointer-events-auto absolute inset-y-0 right-0 z-[22] flex h-full min-h-0 min-w-0 flex-col overflow-y-auto overscroll-contain rounded-l-[1.25rem] border-l border-black/[0.06] bg-white shadow-[-28px_0_60px_-12px_rgba(0,0,0,0.38)] will-change-transform sm:rounded-l-3xl"
+          className="pointer-events-auto absolute inset-y-0 right-0 z-[22] flex h-full min-h-0 w-full min-w-0 flex-col overflow-hidden rounded-l-[1.25rem] border-l border-black/[0.06] bg-white shadow-[-28px_0_60px_-12px_rgba(0,0,0,0.38)] will-change-transform sm:rounded-l-3xl"
           style={{
-            width: `calc(100% - ${2 * HERO_DECK_STEP_REM}rem)`,
+            width: `min(100%, calc(100% - ${2 * HERO_DECK_STEP_REM}rem))`,
           }}
         >
-          <HeroAboutScrapbook />
+          <div className="flex min-h-0 min-w-0 flex-1 flex-col justify-start overflow-hidden px-5 pb-[max(0.5rem,env(safe-area-inset-bottom,0px))] pt-3 sm:px-7 sm:pb-3 sm:pt-4 md:px-9">
+            <HeroAboutScrapbook />
+          </div>
         </div>
 
         <ScrollDownCue ref={scrollCueRef} />
