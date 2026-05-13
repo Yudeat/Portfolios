@@ -65,6 +65,15 @@ function IconHowItWorks({ className }: { className?: string }) {
   );
 }
 
+function IconExperience({ className }: { className?: string }) {
+  return (
+    <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="M6 7h12M6 12h12M6 17h8" stroke="currentColor" strokeWidth="1.35" strokeLinecap="round" />
+      <circle cx="17" cy="17" r="2.25" stroke="currentColor" strokeWidth="1.35" />
+    </svg>
+  );
+}
+
 function IconContact({ className }: { className?: string }) {
   return (
     <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
@@ -95,10 +104,11 @@ const DOCK_ITEMS: DockItem[] = [
   { id: "projects", href: "/#projects", label: "Projects", icon: IconProjects },
   { id: "how-it-works", href: "/#how-it-works", label: "How it works", icon: IconHowItWorks },
   { id: "work", href: "/#work", label: "Skills", icon: IconWork },
+  { id: "experience", href: "/#experience", label: "Experience", icon: IconExperience },
   { id: "contact", href: "/#contact", label: "Contact", icon: IconContact },
 ];
 
-const ORBIT_ANGLES = [-70, -35, 0, 35, 70] as const;
+const ORBIT_ANGLES = [-75, -45, -15, 15, 45, 75] as const;
 const ORBIT_RADIUS_PX = 96;
 
 function clampDockPos(left: number, bottom: number, panelW: number, panelH: number) {

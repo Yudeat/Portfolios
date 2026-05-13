@@ -20,6 +20,7 @@ const MENU_LINKS: NavLinkItem[] = [
   { href: "/#projects", label: "Projects", count: 6 },
   { href: "/#how-it-works", label: "How it works", count: 4 },
   { href: "/#work", label: "Skills", count: 1 },
+  { href: "/#experience", label: "Experience", count: 1 },
   { href: "/#contact", label: "Contact", count: 1 },
 ];
 

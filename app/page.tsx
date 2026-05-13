@@ -2,12 +2,13 @@ import { Hero } from "@/components/sections/Hero";
 import { SkillsExpertiseSection } from "@/components/sections/SkillsExpertiseSection";
 import { SelectedWorkProjects } from "@/components/sections/SelectedWorkProjects";
 import { HowItWorks } from "@/components/sections/HowItWorks";
+import { ExperienceSection } from "@/components/sections/ExperienceSection";
 import { SiteFooter } from "@/components/sections/SiteFooter";
 import { StackCard } from "@/components/layout/StackCard";
 
 export default function Home() {
   return (
-    <main className="min-w-0 overflow-x-clip bg-[#050505]">
+    <main className="min-w-0 bg-[#050505]">
       <Hero />
 
       <StackCard
@@ -26,7 +27,12 @@ export default function Home() {
         <SkillsExpertiseSection />
       </StackCard>
 
-      <StackCard id="contact" stackIndex={4} className="bg-white">
+      {/* Inner section uses its own sticky card stack — outer shell must stay `relative` or nested stickies break. */}
+      <StackCard id="experience" stackIndex={4} sticky={false} className="scroll-mt-20 bg-black">
+        <ExperienceSection />
+      </StackCard>
+
+      <StackCard id="contact" stackIndex={5} className="scroll-mt-20 bg-white">
         <SiteFooter />
       </StackCard>
     </main>
