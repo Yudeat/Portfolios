@@ -1,6 +1,7 @@
 "use client";
 
 import type { FormEvent } from "react";
+import { SITE_CONTACT_EMAIL, SITE_GITHUB_URL, SITE_LINKEDIN_URL, SITE_PHONE_DISPLAY, SITE_PHONE_TEL } from "@/lib/site";
 
 const FAQS = [
   {
@@ -51,7 +52,7 @@ function onNewsletterSubmit(e: FormEvent<HTMLFormElement>) {
   const form = e.currentTarget;
   const email = (form.elements.namedItem("email") as HTMLInputElement | null)?.value?.trim();
   if (!email) return;
-  window.location.href = `mailto:hello@predeep.dev?subject=${encodeURIComponent("Newsletter signup")}&body=${encodeURIComponent(`Please add this email to updates: ${email}`)}`;
+  window.location.href = `mailto:${SITE_CONTACT_EMAIL}?subject=${encodeURIComponent("Newsletter signup")}&body=${encodeURIComponent(`Please add this email to updates: ${email}`)}`;
 }
 
 export function SiteFooter() {
@@ -78,11 +79,11 @@ export function SiteFooter() {
                 </svg>
               </div>
               <address className="not-italic leading-relaxed">
-                <a className="block transition hover:text-[#101116]" href="tel:+9779800000000">
-                  +977 980 000 0000
+                <a className="block transition hover:text-[#101116]" href={`tel:${SITE_PHONE_TEL}`}>
+                  {SITE_PHONE_DISPLAY}
                 </a>
-                <a className="mt-2 block font-medium text-[#101116] transition hover:opacity-70" href="mailto:hello@predeep.dev">
-                  hello@predeep.dev
+                <a className="mt-2 block font-medium text-[#101116] transition hover:opacity-70" href={`mailto:${SITE_CONTACT_EMAIL}`}>
+                  {SITE_CONTACT_EMAIL}
                 </a>
                 <span className="mt-2 block text-[#101116]/62">Kathmandu, Nepal</span>
               </address>
@@ -208,11 +209,11 @@ export function SiteFooter() {
               <a className="flex items-center justify-between gap-2 border-b border-transparent pb-1 transition hover:border-[#101116]/20" href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
                 Instagram <span aria-hidden>→</span>
               </a>
-              <a className="flex items-center justify-between gap-2 border-b border-transparent pb-1 transition hover:border-[#101116]/20" href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">
+              <a className="flex items-center justify-between gap-2 border-b border-transparent pb-1 transition hover:border-[#101116]/20" href={SITE_LINKEDIN_URL} target="_blank" rel="noopener noreferrer">
                 LinkedIn <span aria-hidden>→</span>
               </a>
-              <a className="flex items-center justify-between gap-2 border-b border-transparent pb-1 transition hover:border-[#101116]/20" href="https://open.spotify.com" target="_blank" rel="noopener noreferrer">
-                Spotify <span aria-hidden>→</span>
+              <a className="flex items-center justify-between gap-2 border-b border-transparent pb-1 transition hover:border-[#101116]/20" href={SITE_GITHUB_URL} target="_blank" rel="noopener noreferrer">
+                Github <span aria-hidden>→</span>
               </a>
             </nav>
 

@@ -7,6 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 
 import { useLenis } from "@/components/providers/SmoothScrollProvider";
+import { SITE_GITHUB_URL } from "@/lib/site";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -36,8 +37,8 @@ const PROJECTS: ProjectSlide[] = [
     tech: ["Next.js", "TypeScript", "GSAP", "Tailwind"],
     image: "/images/hero-narrative-sketch.jpg",
     imageAlt: "Portfolio workspace and screens",
-    href: "https://github.com",
-    codeHref: "https://github.com",
+    href: SITE_GITHUB_URL,
+    codeHref: SITE_GITHUB_URL,
     featured: true,
   },
   {
@@ -52,8 +53,8 @@ const PROJECTS: ProjectSlide[] = [
     tech: ["React", "Node", "Postgres", "AWS"],
     image: "/images/lab-playground-bg.png",
     imageAlt: "Abstract product UI mood",
-    href: "https://github.com",
-    codeHref: "https://github.com",
+    href: SITE_GITHUB_URL,
+    codeHref: SITE_GITHUB_URL,
   },
   {
     meta: "ML / API / 2024",
@@ -67,8 +68,8 @@ const PROJECTS: ProjectSlide[] = [
     tech: ["Python", "Docker", "FastAPI", "Redis"],
     image: "/images/hero-circuit-silhouette.png",
     imageAlt: "Circuit silhouette",
-    href: "https://github.com",
-    codeHref: "https://github.com",
+    href: SITE_GITHUB_URL,
+    codeHref: SITE_GITHUB_URL,
   },
   {
     meta: "Design system / 2023",
@@ -82,8 +83,8 @@ const PROJECTS: ProjectSlide[] = [
     tech: ["Storybook", "TypeScript", "CSS"],
     image: "/images/hero-landing-geometry.png",
     imageAlt: "Geometric UI motif",
-    href: "https://github.com",
-    codeHref: "https://github.com",
+    href: SITE_GITHUB_URL,
+    codeHref: SITE_GITHUB_URL,
   },
   {
     meta: "Mobile / 2023",
@@ -97,7 +98,7 @@ const PROJECTS: ProjectSlide[] = [
     tech: ["React Native", "SQLite", "TS"],
     image: "/images/hero-wireframe-astronaut.png",
     imageAlt: "Wireframe illustration",
-    href: "https://github.com",
+    href: SITE_GITHUB_URL,
   },
   {
     meta: "Open source / 2025",
@@ -111,8 +112,8 @@ const PROJECTS: ProjectSlide[] = [
     tech: ["Node", "Vitest"],
     image: "/images/hero-narrative-clocks.jpg",
     imageAlt: "Narrative clocks artwork",
-    href: "https://github.com",
-    codeHref: "https://github.com",
+    href: SITE_GITHUB_URL,
+    codeHref: SITE_GITHUB_URL,
   },
 ];
 

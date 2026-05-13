@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useLenis } from "@/components/providers/SmoothScrollProvider";
 import { SectionHashLink } from "@/components/navigation/SectionHashLink";
+import { SITE_CONTACT_EMAIL, SITE_GITHUB_URL, SITE_LINKEDIN_URL } from "@/lib/site";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -263,11 +264,11 @@ export function SplitScreenNav({
               Let&apos;s talk
             </p>
             <Link
-              href="mailto:predeep@example.com"
+              href={`mailto:${SITE_CONTACT_EMAIL}`}
               onClick={onClose}
               className="split-nav-contact group mt-3 block min-w-0 break-words text-[clamp(0.95rem,3.8vw,1.55rem)] font-semibold uppercase tracking-[0.06em] text-[#101116] underline decoration-[#101116]/28 decoration-2 underline-offset-[0.35em] transition-all hover:text-[#3d5a8a] hover:decoration-[#3d5a8a]/55 sm:mt-4 sm:tracking-[0.08em] sm:text-[clamp(1.05rem,2.2vw,1.65rem)] sm:underline-offset-8"
             >
-              predeep@example.com
+              {SITE_CONTACT_EMAIL}
               <span className="inline-block pl-2 text-[#101116]/45 transition-colors group-hover:text-[#3d5a8a]" aria-hidden>
                 +
               </span>
@@ -281,8 +282,8 @@ export function SplitScreenNav({
               </p>
               <div className="mt-3 flex flex-wrap gap-x-4 gap-y-3 sm:mt-4 sm:gap-5">
                 {[
-                  { href: "https://linkedin.com", label: "LinkedIn" },
-                  { href: "https://github.com", label: "GitHub" },
+                  { href: SITE_LINKEDIN_URL, label: "LinkedIn" },
+                  { href: SITE_GITHUB_URL, label: "GitHub" },
                   { href: "https://instagram.com", label: "Instagram" },
                 ].map((s) => (
                   <a
