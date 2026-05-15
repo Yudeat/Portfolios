@@ -97,7 +97,7 @@ function StepFrame({ accent, children }: { accent: boolean; children: ReactNode 
 export function HowItWorks() {
   return (
     <section
-      className="flex min-h-0 flex-col justify-center bg-white px-4 py-8 text-[#101116] sm:px-10 sm:py-10 lg:px-16"
+      className="flex min-h-[100dvh] flex-col justify-center bg-white px-4 py-12 text-[#101116] sm:px-10 sm:py-16 lg:px-16"
       aria-labelledby="how-it-works-heading"
     >
       <div className="mx-auto w-full max-w-7xl text-center">

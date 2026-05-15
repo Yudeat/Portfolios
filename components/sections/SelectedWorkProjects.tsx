@@ -292,9 +292,8 @@ export function SelectedWorkProjects() {
       mm.add(MD_QUERY, () => {
         const getTravel = () => Math.max(8, Math.ceil(track.scrollWidth - pin.clientWidth + 1));
 
-        /** At least one full viewport of scroll per slide transition, but never less than true horizontal travel. */
-        const getScrollSpan = () =>
-          Math.max(getTravel(), window.innerHeight * Math.max(1, total - 1));
+        /** Scroll distance while pinned — tied to horizontal travel only (no extra viewport×slides padding). */
+        const getScrollSpan = () => getTravel();
 
         gsap.set(track, { x: 0, force3D: true });
 

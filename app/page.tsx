@@ -14,6 +14,7 @@ export default function Home() {
       <StackCard
         id="projects"
         stackIndex={1}
+        sticky={false}
         className="-mt-[min(44vh,520px)] scroll-mt-20 bg-white"
         minHeightClass="min-h-0"
       >
@@ -23,6 +24,7 @@ export default function Home() {
       <StackCard
         id="how-it-works"
         stackIndex={2}
+        sticky={false}
         className="scroll-mt-20 bg-white"
         minHeightClass="min-h-0"
       >

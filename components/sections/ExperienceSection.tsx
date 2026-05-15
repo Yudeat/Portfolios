@@ -12,88 +12,58 @@ gsap.registerPlugin(ScrollTrigger);
  */
 
 const STATS = [
-  { value: "4+", label: "Years experience" },
-  { value: "30+", label: "Projects delivered" },
-  { value: "6", label: "Companies" },
+  { value: "1+", label: "Years experience" },
+  { value: "5+", label: "Projects shipped" },
+  { value: "3", label: "Roles" },
 ] as const;
 
+/** Newest first — matches LinkedIn experience order. */
 const ROLES = [
   {
     index: "01",
     status: "Active",
-    dates: "2021 — Present",
-    title: "Freelance Web Designer",
-    company: "Self-employed",
-    location: "Remote",
+    dates: "Oct 2025 — Apr 2026",
+    title: "Senior Web Developer",
+    company: "theorigintech · Full-time",
+    location: "Tinkune Marg, Kathmandu · On-site",
     description:
-      "Independent product and marketing sites for small teams — from concept through launch, performance, and handoff.",
+      "Full-time senior role building and shipping web products — React.js frontends, Node.js services, and close collaboration with the team on-site in Kathmandu.",
     achievements: [
-      "Delivered 15+ landing pages and marketing sites",
-      "Built websites for restaurants, law firms, and local businesses",
-      "Achieved an average ~12.5% traffic lift on redesign scopes",
-      "Developed a personal OS-style portfolio to showcase craft",
+      "Led feature delivery across the React.js and Node.js stack",
+      "Worked on-site with engineers on architecture, reviews, and releases",
+      "Shipped production-ready UI and API work for client-facing products",
     ],
-    tags: ["Next.js", "Tailwind CSS", "GSAP", "Lenis"],
+    tags: ["Node.js", "React.js", "TypeScript", "REST API"],
   },
   {
     index: "02",
-    status: "Active",
-    dates: "March 2023 — Present",
-    title: "Pedagogical Tutor",
-    company: "École O'clock",
-    location: "Remote",
+    dates: "Sep 2025 — Nov 2025",
+    title: "Back End Developer",
+    company: "Frontbase Inc · Internship",
+    location: "On-site",
     description:
-      "Hands-on mentoring for full-time web development cohorts — code reviews, live debugging, and curriculum feedback.",
+      "Backend-focused internship — APIs, data flows, and server-side logic with an emphasis on reliable, maintainable Node.js services.",
     achievements: [
-      "Mentored 50+ students across JavaScript and React tracks",
-      "Developed custom exercises and walkthrough materials",
-      "Helped raise cohort success and completion metrics by ~15%",
+      "Built and maintained backend services and API endpoints",
+      "Debugged data and integration issues across the stack",
+      "Collaborated with the team on backend patterns and code quality",
     ],
-    tags: ["TypeScript", "React", "Node.js", "Mentoring"],
+    tags: ["Node.js", "Backend", "REST API", "PostgreSQL"],
   },
   {
     index: "03",
-    dates: "March 2022 — March 2023",
-    title: "Alumni Pedagogical Tutor",
-    company: "École O'clock",
-    location: "France",
+    dates: "Jun 2025 — Sep 2025",
+    title: "Full-stack Developer",
+    company: "Webpoint Solutions, LLC · Internship",
+    location: "On-site",
     description:
-      "Post-bootcamp support for alumni re-entering the job market — portfolio reviews, interview prep, and technical refreshers.",
+      "Full-stack internship — React.js interfaces, Node.js backends, and on-site delivery with the engineering team on client projects.",
     achievements: [
-      "Supported 30+ alumni through career transitions",
-      "Created focused React.js workshops and recap sessions",
+      "Shipped React.js UI and Node.js features for active client work",
+      "Collaborated on-site on integration, testing, and releases",
+      "Grew full-stack skills across the JavaScript product stack",
     ],
-    tags: ["React", "Mentoring", "Workshops"],
-  },
-  {
-    index: "04",
-    dates: "Nov 2021 — March 2022",
-    title: "Freelance Developer",
-    company: "Self-employed",
-    location: "France",
-    description:
-      "Short-contract builds and teaching — full-stack features, security-minded frontends, and tailored JS training.",
-    achievements: [
-      "Built a cybersecurity awareness platform with React and Node.js",
-      "Delivered custom JavaScript courses for client teams",
-      "Full-stack work with PostgreSQL and Sequelize",
-    ],
-    tags: ["React", "Node.js", "PostgreSQL", "Sequelize"],
-  },
-  {
-    index: "05",
-    dates: "May 2021 — Nov 2021",
-    title: "Developer Designer",
-    company: "AMELIANO SAS",
-    location: "France",
-    description:
-      "Product implementation for a mobility marketplace — payments, dashboards, and end-user flows in production.",
-    achievements: [
-      "Built MyMaka platform connecting users with taxi fleets",
-      "Integrated Adyen for card payments and payouts",
-      "Shipped features with Vue.js, Node.js, and PostgreSQL",
-    ],
-    tags: ["Vue.js", "Node.js", "PostgreSQL", "Adyen"],
+    tags: ["Node.js", "React.js", "TypeScript", "REST API", "PostgreSQL"],
   },
 ] as const;
 
@@ -308,7 +278,8 @@ export function ExperienceSection() {
       >
         {ROLES.map((entry, i) => {
           const targetScale = Math.max(0.5, 1 - (total - i - 1) * 0.1);
-          const range: [number, number] = [i * 0.25, 1];
+          const range: [number, number] =
+            total > 1 ? [i / (total - 1), 1] : [0, 1];
 
           return (
             <div
