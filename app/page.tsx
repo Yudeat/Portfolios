@@ -8,24 +8,25 @@ import { StackCard } from "@/components/layout/StackCard";
 
 export default function Home() {
   return (
-    <main className="min-w-0  bg-[#050505]">
-      <Hero />
+    <div className="w-full overflow-x-clip">
+      <main className="min-w-0 w-full bg-white">
+        <Hero />
 
+      {/** Pull up over hero; min-h-0 avoids a forced 100dvh white gutter below Selected work. */}
       <StackCard
         id="projects"
         stackIndex={1}
-        sticky={false}
-        className="-mt-[min(44vh,520px)] scroll-mt-20 bg-white"
+        className="scroll-mt-20 bg-white pt-px -mt-[100dvh]"
         minHeightClass="min-h-0"
       >
         <SelectedWorkProjects />
       </StackCard>
 
+      {/** Sticky stack over Selected work (same pull-up pattern as projects over hero). */}
       <StackCard
         id="how-it-works"
         stackIndex={2}
-        sticky={false}
-        className="scroll-mt-20 bg-white"
+        className="scroll-mt-20 bg-white pt-px -mt-[100dvh]"
         minHeightClass="min-h-0"
       >
         <HowItWorks />
@@ -49,6 +50,7 @@ export default function Home() {
       <StackCard id="contact" stackIndex={5} className="scroll-mt-20 bg-white">
         <SiteFooter />
       </StackCard>
-    </main>
+      </main>
+    </div>
   );
 }

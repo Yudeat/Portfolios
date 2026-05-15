@@ -33,9 +33,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="w-full overflow-x-clip">
       <body
-        className={`${inter.variable} ${playfair.variable} min-w-0 overflow-x-clip bg-[#050505] font-sans text-white antialiased`}
+        className={`${inter.variable} ${playfair.variable} min-w-0 w-full overflow-x-clip bg-white font-sans text-neutral-900 antialiased`}
       >
         <SmoothScrollProvider>
           <FirstLoadScreen />

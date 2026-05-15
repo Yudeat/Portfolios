@@ -37,8 +37,8 @@ export function HeroAboutScrapbook() {
   const [leadDone, setLeadDone] = useState(false);
 
   return (
-    /* overflow-x-hidden strictly prevents any horizontal screen wobbling during vertical scrolls */
-    <div className="pointer-events-auto relative flex w-full shrink-0 flex-col bg-white overflow-x-hidden pt-[max(0.5rem,env(safe-area-inset-top))] pb-[max(2.5rem,calc(env(safe-area-inset-bottom,0px)+2rem))]">
+    /* overflow-hidden clips 3D perspective / transforms; w-full avoids vw-based horizontal bleed */
+    <div className="pointer-events-auto relative flex w-full min-w-0 shrink-0 flex-col overflow-hidden bg-white pt-[max(0.5rem,env(safe-area-inset-top))] pb-[max(2.5rem,calc(env(safe-area-inset-bottom,0px)+2rem))]">
       <AboutScrapbookThreeBackdrop />
       
       <div className="pointer-events-auto relative z-[1] w-full max-w-none px-5 pb-6 pt-4 sm:px-8 sm:pb-8 sm:pt-5 md:px-10 md:pb-10 md:pt-6 lg:px-12">
@@ -76,14 +76,16 @@ export function HeroAboutScrapbook() {
           </div>
 
           {/* Column 2: Vertical Decorative Typography Signature */}
-          <div 
-            className={`pointer-events-none flex select-none items-center justify-center lg:self-stretch transition-opacity duration-500 ${
-              leadDone ? "opacity-100" : "opacity-10 lg:opacity-20"
-            }`}
-          >
-            <p className="text-center font-black uppercase leading-none tracking-[-0.06em] text-neutral-200 text-[clamp(2.75rem,10vw,4.5rem)] lg:text-[clamp(3.25rem,10vh,5.5rem)] lg:[writing-mode:vertical-rl]" aria-hidden="true">
-              Pradeep
-            </p>
+          <div className="pointer-events-none relative overflow-hidden select-none lg:self-stretch">
+            <div
+              className={`flex items-center justify-center transition-opacity duration-500 ${
+                leadDone ? "opacity-100" : "opacity-10 lg:opacity-20"
+              }`}
+            >
+              <p className="text-center font-black uppercase leading-none tracking-[-0.06em] text-neutral-200 text-[clamp(2.75rem,10vw,4.5rem)] lg:text-[clamp(3.25rem,10vh,5.5rem)] lg:[writing-mode:vertical-rl]" aria-hidden="true">
+                Pradeep
+              </p>
+            </div>
           </div>
 
           {/* Column 3: Main Profile Text Description (Fades inside structural footprint safely) */}
@@ -102,7 +104,7 @@ export function HeroAboutScrapbook() {
           </aside>
 
           {/* Column 4: 3D Instagram Perspective Card Asset */}
-          <div className="mx-auto flex w-full max-w-[16rem] shrink-0 flex-col items-center gap-4 lg:mx-0" style={{ perspective: "1100px" }}>
+          <div className="mx-auto flex w-full max-w-[16rem] shrink-0 flex-col items-center gap-4 overflow-hidden px-1 lg:mx-0" style={{ perspective: "1100px" }}>
             {/* Margins protect the boundaries from side leaks caused by horizontal 3D swinging lines */}
             <div className="relative w-full rounded-[1.75rem] border-[3px] border-black bg-white p-2 shadow-[0_28px_50px_-12px_rgba(0,0,0,0.35)] transform lg:mx-2 lg:[transform:rotateX(10deg)_rotateY(-18deg)_rotateZ(-1deg)]">
               <div className="flex items-center gap-2 border-b border-neutral-200 px-2 py-2">
@@ -131,7 +133,7 @@ export function HeroAboutScrapbook() {
 
             <div className="w-full text-center text-[12px] font-medium leading-snug text-neutral-600 min-h-[50px]">
               {leadDone ? (
-                <TypewriterText id="insta-blurb" as="p" text={INSTA_CAPTION_BLURB} className="text-pretty" charDelayMs={8} />
+                <TypewriterText as="p" text={INSTA_CAPTION_BLURB} className="text-pretty" charDelayMs={8} />
               ) : (
                 <p className="sr-only">{INSTA_CAPTION_BLURB}</p>
               )}
@@ -141,7 +143,7 @@ export function HeroAboutScrapbook() {
         </div>
 
         {/* Global Bottom Section Label Backdrop Anchor */}
-        <div className="pointer-events-none select-none w-full mt-6">
+        <div className="pointer-events-none mt-6 w-full select-none overflow-hidden">
           <p className="text-center text-[clamp(3rem,11vw,6.5rem)] font-black uppercase leading-none tracking-[-0.05em] text-neutral-300/60" aria-hidden="true">
             About
           </p>

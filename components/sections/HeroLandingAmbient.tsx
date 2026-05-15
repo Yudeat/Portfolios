@@ -72,10 +72,10 @@ function EditorialScribbleRing({ className }: { className?: string }) {
  */
 export function HeroLandingAmbient() {
   return (
-    <>
+    <div className="absolute inset-0 overflow-hidden">
       <div className="absolute inset-0 bg-[#E32119]" aria-hidden />
 
-      <div className="pointer-events-none absolute left-1/2 top-[max(12%,env(safe-area-inset-top))] flex -translate-x-1/2 flex-col items-center sm:top-[max(10%,env(safe-area-inset-top))]" aria-hidden>
+      <div className="pointer-events-none absolute left-1/2 top-[max(12%,env(safe-area-inset-top))] flex w-full max-w-full -translate-x-1/2 flex-col items-center overflow-hidden px-2 sm:top-[max(10%,env(safe-area-inset-top))]" aria-hidden>
         <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white shadow-none sm:h-14 sm:w-14">
           <span className="text-lg font-semibold italic leading-none tracking-[-0.08em] text-[#E32119] sm:text-xl">
             PD
@@ -87,11 +87,11 @@ export function HeroLandingAmbient() {
       </div>
 
       <div
-        className="pointer-events-none absolute left-1/2 top-[48%] w-[min(118vw,_640px)] -translate-x-1/2 -translate-y-1/2 sm:w-[min(92vw,_720px)] md:w-[min(88vw,_820px)]"
+        className="pointer-events-none absolute left-1/2 top-[48%] w-full max-w-[640px] -translate-x-1/2 -translate-y-1/2 sm:max-w-[720px] md:max-w-[820px]"
         aria-hidden
       >
         <EditorialScribbleRing className="h-auto w-full text-black drop-shadow-none" />
       </div>
-    </>
+    </div>
   );
 }

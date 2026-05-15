@@ -337,12 +337,12 @@ export function SelectedWorkProjects() {
   }, [total]);
 
   return (
-    <section ref={containerRef} className="relative overflow-hidden bg-white px-4 pb-8 pt-[max(3rem,8vh)] text-neutral-900 sm:px-8 sm:pb-10 sm:pt-[10vh] md:px-8 md:pb-6 md:pt-6 lg:px-16" aria-labelledby="selected-work-heading">
+    <section ref={containerRef} className="relative z-10 -mt-px overflow-hidden bg-white px-4 pb-8 pt-4 text-neutral-900 sm:px-8 sm:pb-10 sm:pt-5 md:px-8 md:pb-6 md:pt-6 lg:px-16" aria-labelledby="selected-work-heading">
       <h2 id="selected-work-heading" className="sr-only">Selected work</h2>
       <div className="pointer-events-none absolute inset-0 opacity-[0.35] [background-image:linear-gradient(to_right,rgba(0,0,0,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.04)_1px,transparent_1px)] [background-size:40px_40px]" aria-hidden />
 
       <div ref={pinRef} className="relative z-[1] md:flex md:min-h-0 md:flex-col md:overflow-hidden">
-        <div className="mx-auto flex w-full max-w-[1400px] flex-col px-4 pb-6 pt-[max(3rem,8vh)] md:min-h-0 md:px-8 md:pb-6 md:pt-8 lg:px-6 lg:pb-8 lg:pt-10">
+        <div className="mx-auto flex w-full max-w-[1400px] flex-col px-4 pb-6 pt-0 md:min-h-0 md:px-8 md:pb-6 lg:px-6 lg:pb-8">
           <header className="flex shrink-0 flex-wrap items-start justify-between gap-6 border-b border-neutral-200 pb-8 sm:pb-10">
             <div className="inline-flex items-center gap-2.5 border border-[#E32119] px-3 py-2 sm:px-3.5 sm:py-2.5">
               <span className="text-[#E32119]" aria-hidden>

@@ -155,17 +155,6 @@ export function Hero() {
         "aboutEnter",
       );
 
-      tl.addLabel("aboutExit", ABOUT_EXIT_START);
-      tl.to(
-        philosophyPage,
-        { x: "100%", duration: ABOUT_EXIT_MOVE_DURATION, ease: "power2.in" },
-        "aboutExit",
-      );
-      tl.to(
-        philosophyPage,
-        { autoAlpha: 0, duration: ABOUT_EXIT_FADE_DURATION, ease: "none" },
-        ABOUT_EXIT_START + ABOUT_EXIT_MOVE_DURATION,
-      );
 
       tl.to(
         shell,
@@ -189,7 +178,7 @@ export function Hero() {
   );
 
   return (
-    <section id="hero" ref={sectionRef} className="relative z-0 min-h-[100dvh] overflow-hidden bg-[#050505]">
+    <section id="hero" ref={sectionRef} className="relative z-0 min-h-[100dvh] w-full min-w-0 overflow-hidden bg-[#050505]">
       <div ref={pinWrapRef} className="relative h-[100dvh] min-h-[100dvh] w-full min-w-0 overflow-hidden">
         {/* Card 1 — full-bleed ambient (back of deck) */}
         <div ref={ambientRef} className="absolute inset-0 z-[4]">
@@ -259,13 +248,10 @@ export function Hero() {
           </div>
         </div>
 
-        {/* Card 3 — about scrapbook: GSAP slides the shell; no inner scroll (page scroll only). */}
+        {/* Card 3 — about scrapbook: full-bleed white panel (no left “deck peek” strip). */}
         <div
           ref={philosophyPageRef}
-          className="pointer-events-auto absolute inset-y-0 right-0 z-[22] flex h-full min-h-0 w-full min-w-0 flex-col overflow-hidden rounded-l-[1.25rem] border-l border-black/[0.06] bg-white shadow-[-28px_0_60px_-12px_rgba(0,0,0,0.38)] will-change-transform sm:rounded-l-3xl"
-          style={{
-            width: `min(100%, calc(100% - ${2 * HERO_DECK_STEP_REM}rem))`,
-          }}
+          className="pointer-events-auto absolute inset-0 z-[22] flex h-full min-h-0 w-full min-w-0 flex-col overflow-hidden bg-white will-change-transform"
         >
           <div className="flex min-h-0 min-w-0 flex-1 flex-col justify-start overflow-hidden px-5 pb-[max(0.5rem,env(safe-area-inset-bottom,0px))] pt-3 sm:px-7 sm:pb-3 sm:pt-4 md:px-9">
             <HeroAboutScrapbook />
