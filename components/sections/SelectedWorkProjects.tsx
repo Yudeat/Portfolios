@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Fragment, useCallback, useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -107,13 +107,7 @@ const PROJECTS: ProjectSlide[] = [
 function IconArrowOut({ className }: { className?: string }) {
   return (
     <svg className={className} width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path
-        d="M14 3h7v7M10 14 21 3M21 14v7H3V3h7"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+      <path d="M14 3h7v7M10 14 21 3M21 14v7H3V3h7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -128,21 +122,11 @@ function IconGithub({ className }: { className?: string }) {
 
 function IconChevron({ className, dir }: { className?: string; dir: "left" | "right" }) {
   return (
-    <svg
-      className={`${className ?? ""} ${dir === "left" ? "scale-x-[-1]" : ""}`.trim()}
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill="none"
-      aria-hidden
-    >
+    <svg className={`${className ?? ""} ${dir === "left" ? "scale-x-[-1]" : ""}`.trim()} width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
       <path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
-
-const SCROLL_TRIGGER_ID = "selected-work-horizontal";
-const MD_QUERY = "(min-width: 768px)";
 
 function ProjectSlideBody({ project, slideIndex }: { project: ProjectSlide; slideIndex: number }) {
   return (
@@ -177,22 +161,12 @@ function ProjectSlideBody({ project, slideIndex }: { project: ProjectSlide; slid
         </ul>
 
         <div className="mt-8 flex flex-wrap gap-3 sm:mt-10">
-          <a
-            href={project.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-[#E32119] px-5 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-white transition hover:bg-[#c41d17] sm:px-6 sm:text-sm"
-          >
+          <a href={project.href} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#E32119] px-5 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-white transition hover:bg-[#c41d17] sm:px-6 sm:text-sm">
             View project
             <IconArrowOut className="shrink-0" />
           </a>
           {project.codeHref ? (
-            <a
-              href={project.codeHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 border border-neutral-900/90 bg-white px-5 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-neutral-900 transition hover:border-neutral-950 hover:bg-neutral-50 sm:px-6 sm:text-sm"
-            >
+            <a href={project.codeHref} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 border border-neutral-900/90 bg-white px-5 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-neutral-900 transition hover:border-neutral-950 hover:bg-neutral-50 sm:px-6 sm:text-sm">
               Code
               <IconGithub className="shrink-0 opacity-90" />
             </a>
@@ -202,14 +176,7 @@ function ProjectSlideBody({ project, slideIndex }: { project: ProjectSlide; slid
 
       <div className="relative order-1 lg:order-2">
         <div className="relative aspect-[4/3] w-full overflow-hidden border border-neutral-200 bg-neutral-100 sm:aspect-[16/11] lg:aspect-[5/4] xl:aspect-[16/10]">
-          <Image
-            src={project.image}
-            alt={project.imageAlt}
-            fill
-            sizes="(max-width: 1024px) 100vw, 50vw"
-            className="object-contain"
-            priority={slideIndex === 0}
-          />
+          <Image src={project.image} alt={project.imageAlt} fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-contain" priority={slideIndex === 0} />
           {project.featured ? (
             <div className="absolute right-3 top-3 flex items-center gap-1.5 bg-[#E32119] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white sm:right-4 sm:top-4 sm:px-3 sm:text-[11px]">
               <span aria-hidden>★</span> Featured
@@ -221,282 +188,192 @@ function ProjectSlideBody({ project, slideIndex }: { project: ProjectSlide; slid
   );
 }
 
-/**
- * Selected work — horizontal swipe driven by scroll (ScrollTrigger + scrub) on md+;
- * stacked panels on small screens.
- */
 export function SelectedWorkProjects() {
   const total = PROJECTS.length;
   const lenis = useLenis();
-  const [index, setIndex] = useState(0);
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [horizontalActive, setHorizontalActive] = useState(false);
 
+  const containerRef = useRef<HTMLDivElement>(null);
   const pinRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
-  const rafRef = useRef<number>(0);
+  const progressBarRef = useRef<HTMLDivElement>(null);
+  const progressTextRef = useRef<HTMLSpanElement>(null);
+  const currentNumRef = useRef<HTMLSpanElement>(null);
+  const triggerInstanceRef = useRef<ScrollTrigger | null>(null);
 
-  const scrollToProgress = useCallback(
-    (p: number) => {
-      const st = ScrollTrigger.getById(SCROLL_TRIGGER_ID);
-      if (!st) return;
-      const clamped = Math.min(1, Math.max(0, p));
-      const y = st.start + (st.end - st.start) * clamped;
-      if (lenis) {
-        lenis.scrollTo(y, { duration: 0.85 });
-      } else {
-        window.scrollTo({ top: y, behavior: "smooth" });
-      }
-    },
-    [lenis],
-  );
+  const getScrollTriggerProgress = () => {
+    if (triggerInstanceRef.current) {
+      return triggerInstanceRef.current.progress;
+    }
+    return 0;
+  };
 
-  const go = useCallback(
-    (delta: number) => {
-      if (horizontalActive) {
-        const st = ScrollTrigger.getById(SCROLL_TRIGGER_ID);
-        if (!st) return;
-        const step = 1 / Math.max(1, total - 1);
-        const current = st.progress;
-        const next = Math.min(1, Math.max(0, current + delta * step));
-        scrollToProgress(next);
-        return;
-      }
-      setIndex((i) => {
-        const n = i + delta;
-        if (n < 0) return total - 1;
-        if (n >= total) return 0;
-        return n;
-      });
-    },
-    [horizontalActive, scrollToProgress, total],
-  );
+  const navigateToProgress = (targetProgress: number) => {
+    if (!triggerInstanceRef.current) return;
+    const st = triggerInstanceRef.current;
+    const clamped = Math.min(1, Math.max(0, targetProgress));
+    const targetY = st.start + (st.end - st.start) * clamped;
 
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "ArrowRight") go(1);
-      if (e.key === "ArrowLeft") go(-1);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [go]);
+    if (lenis) {
+      lenis.scrollTo(targetY, { duration: 0.85 });
+    } else {
+      window.scrollTo({ top: targetY, behavior: "smooth" });
+    }
+  };
+
+  const handleStepNavigation = (direction: number) => {
+    const stepSize = 1 / Math.max(1, total - 1);
+    const nextProgress = getScrollTriggerProgress() + direction * stepSize;
+    navigateToProgress(nextProgress);
+  };
 
   useGSAP(
     () => {
       const pin = pinRef.current;
       const track = trackRef.current;
-      if (!pin || !track) return;
+      const progressBar = progressBarRef.current;
+      const progressText = progressTextRef.current;
+      const currentNum = currentNumRef.current;
+      const slides = gsap.utils.toArray<HTMLElement>("[data-project-slide]");
+
+      if (!pin || !track || !progressBar || !progressText || !currentNum) return;
 
       const mm = gsap.matchMedia();
 
-      mm.add(MD_QUERY, () => {
-        const getTravel = () => Math.max(8, Math.ceil(track.scrollWidth - pin.clientWidth + 1));
+      mm.add("(min-width: 768px)", () => {
+        const calculateTravelDistance = () => Math.max(8, Math.ceil(track.scrollWidth - pin.clientWidth + 1));
+        
+        gsap.set(track, { x: 0 });
 
-        /** Scroll distance while pinned — tied to horizontal travel only (no extra viewport×slides padding). */
-        const getScrollSpan = () => getTravel();
+        // High-performance atomic UI updates without state-driven re-renders
+        const updateUIElements = (progress: number) => {
+          const clampedProgress = Math.min(1, Math.max(0, progress));
+          const currentSlideIdx = Math.min(total - 1, Math.round(clampedProgress * (total - 1)));
+          
+          gsap.set(progressBar, { scaleX: clampedProgress, transformOrigin: "left center" });
+          progressText.innerText = `${Math.round(clampedProgress * 100)}%`;
+          currentNum.innerText = String(currentSlideIdx + 1).padStart(2, "0");
 
-        gsap.set(track, { x: 0, force3D: true });
-
-        const syncFromProgress = (progress: number, immediate = false) => {
-          const apply = () => {
-            setScrollProgress(progress);
-            const idx = Math.min(total - 1, Math.round(progress * Math.max(1, total - 1)));
-            setIndex(idx);
-          };
-          if (immediate) {
-            cancelAnimationFrame(rafRef.current);
-            apply();
-            return;
-          }
-          cancelAnimationFrame(rafRef.current);
-          rafRef.current = requestAnimationFrame(apply);
+          slides.forEach((slide, idx) => {
+            if (idx === currentSlideIdx) {
+              slide.classList.remove("pointer-events-none");
+              slide.removeAttribute("aria-hidden");
+            } else {
+              slide.classList.add("pointer-events-none");
+              slide.setAttribute("aria-hidden", "true");
+            }
+          });
         };
 
-        const tween = gsap.to(track, {
-          x: () => -getTravel(),
-          ease: "none",
-          force3D: true,
+        const horizontalTimeline = gsap.timeline({
           scrollTrigger: {
-            id: SCROLL_TRIGGER_ID,
+            id: "selected-work-horizontal",
             trigger: pin,
             start: "top top",
-            end: () => `+=${getScrollSpan()}`,
+            end: () => `+=${calculateTravelDistance()}`,
             scrub: 0.55,
             pin: true,
             pinSpacing: true,
-            anticipatePin: 0,
             invalidateOnRefresh: true,
-            onUpdate: (self) => syncFromProgress(self.progress),
-            onRefresh: (self) => syncFromProgress(self.progress, true),
+            onUpdate: (self) => updateUIElements(self.progress),
+            onRefresh: (self) => updateUIElements(self.progress),
           },
         });
 
-        const st = tween.scrollTrigger;
-        if (st) {
-          syncFromProgress(st.progress, true);
-        }
-        setHorizontalActive(true);
-
-        const ro = new ResizeObserver(() => {
-          ScrollTrigger.refresh();
+        horizontalTimeline.to(track, {
+          x: () => -calculateTravelDistance(),
+          ease: "none",
         });
-        ro.observe(pin);
-        ro.observe(track);
 
-        const onLoad = () => ScrollTrigger.refresh();
-        window.addEventListener("load", onLoad);
-        const t = window.setTimeout(() => ScrollTrigger.refresh(), 150);
+        triggerInstanceRef.current = horizontalTimeline.scrollTrigger || null;
 
         return () => {
-          cancelAnimationFrame(rafRef.current);
-          ro.disconnect();
-          window.removeEventListener("load", onLoad);
-          window.clearTimeout(t);
-          tween.scrollTrigger?.kill();
-          tween.kill();
-          setHorizontalActive(false);
+          if (horizontalTimeline.scrollTrigger) horizontalTimeline.scrollTrigger.kill();
+          horizontalTimeline.kill();
+          triggerInstanceRef.current = null;
         };
       });
 
-      return () => {
-        mm.revert();
-      };
+      // Handle mobile vertical behavior utilizing IntersectionObserver
+      mm.add("(max-width: 767px)", () => {
+        if (slides.length === 0) return;
+
+        const observerOptions = {
+          root: null,
+          threshold: [0.2, 0.5, 0.8],
+        };
+
+        const mobileObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting && entry.intersectionRatio > 0.4) {
+              const targetElement = entry.target as HTMLElement;
+              const slideIndexAttr = targetElement.dataset.slideIndex;
+              if (slideIndexAttr) {
+                const activeIndex = parseInt(slideIndexAttr, 10);
+                currentNum.innerText = String(activeIndex + 1).padStart(2, "0");
+                
+                const dynamicProgress = activeIndex / (total - 1);
+                gsap.set(progressBar, { scaleX: dynamicProgress, transformOrigin: "left center" });
+                progressText.innerText = `${Math.round(dynamicProgress * 100)}%`;
+              }
+            }
+          });
+        }, observerOptions);
+
+        slides.forEach((slide) => mobileObserver.observe(slide));
+
+        return () => mobileObserver.disconnect();
+      });
     },
-    { dependencies: [total] },
+    { scope: containerRef, dependencies: [total] }
   );
 
   useEffect(() => {
-    const mq = window.matchMedia("(max-width: 767px)");
-    let io: IntersectionObserver | null = null;
-
-    const sync = () => {
-      io?.disconnect();
-      io = null;
-      if (!mq.matches || !pinRef.current) return;
-      const slides = pinRef.current.querySelectorAll("[data-project-slide]");
-      if (slides.length === 0) return;
-      io = new IntersectionObserver(
-        (entries) => {
-          const hit = entries
-            .filter((e) => e.isIntersecting && e.intersectionRatio > 0.25)
-            .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-          if (!hit?.target) return;
-          const raw = (hit.target as HTMLElement).dataset.slideIndex;
-          const idx = raw ? Number.parseInt(raw, 10) : 0;
-          if (!Number.isNaN(idx)) {
-            setIndex(idx);
-          }
-        },
-        { root: null, threshold: [0, 0.15, 0.25, 0.4, 0.6] },
-      );
-      slides.forEach((el) => io?.observe(el));
+    const handleKeyboardNavigation = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight") handleStepNavigation(1);
+      if (e.key === "ArrowLeft") handleStepNavigation(-1);
     };
-
-    sync();
-    mq.addEventListener("change", sync);
-    return () => {
-      mq.removeEventListener("change", sync);
-      io?.disconnect();
-    };
+    window.addEventListener("keydown", handleKeyboardNavigation);
+    return () => window.removeEventListener("keydown", handleKeyboardNavigation);
   }, [total]);
 
-  const displayProgress = horizontalActive ? scrollProgress : index / Math.max(1, total - 1);
-  const pctLabel = Math.round(displayProgress * 100);
-  const barWidth = displayProgress * 100;
-
   return (
-    <section
-      className="relative overflow-hidden bg-white px-4 pb-8 pt-[max(3rem,8vh)] text-neutral-900 sm:px-8 sm:pb-10 sm:pt-[10vh] md:px-8 md:pb-6 md:pt-6 lg:px-16"
-      aria-labelledby="selected-work-heading"
-    >
-      <h2 id="selected-work-heading" className="sr-only">
-        Selected work
-      </h2>
+    <section ref={containerRef} className="relative overflow-hidden bg-white px-4 pb-8 pt-[max(3rem,8vh)] text-neutral-900 sm:px-8 sm:pb-10 sm:pt-[10vh] md:px-8 md:pb-6 md:pt-6 lg:px-16" aria-labelledby="selected-work-heading">
+      <h2 id="selected-work-heading" className="sr-only">Selected work</h2>
+      <div className="pointer-events-none absolute inset-0 opacity-[0.35] [background-image:linear-gradient(to_right,rgba(0,0,0,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.04)_1px,transparent_1px)] [background-size:40px_40px]" aria-hidden />
 
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.35] [background-image:linear-gradient(to_right,rgba(0,0,0,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.04)_1px,transparent_1px)] [background-size:40px_40px]"
-        aria-hidden
-      />
-
-      {/*
-        Selected work — scroll-scrubbed horizontal strip (md+).
-
-        • pinRef: ScrollTrigger `pin: true` attaches here. GSAP wraps this node and injects
-          a `.pin-spacer.pin-spacer-selected-work-horizontal` sibling: tall wrapper + bottom
-          padding so the page scroll length matches the horizontal scrub (that spacer is not
-          in JSX; you see it in DevTools as the “huge” white block while pinned).
-
-        • trackRef: flex row of full-width slides; GSAP animates `transform: translateX(...)`
-          against vertical scroll progress.
-
-        • Non-active slides get `pointer-events-none` so “View project” hits the visible slide.
-
-        • Progress bar: Start / % / End mirrors the same scrub progress.
-      */}
       <div ref={pinRef} className="relative z-[1] md:flex md:min-h-0 md:flex-col md:overflow-hidden">
         <div className="mx-auto flex w-full max-w-[1400px] flex-col px-4 pb-6 pt-[max(3rem,8vh)] md:min-h-0 md:px-8 md:pb-6 md:pt-8 lg:px-6 lg:pb-8 lg:pt-10">
           <header className="flex shrink-0 flex-wrap items-start justify-between gap-6 border-b border-neutral-200 pb-8 sm:pb-10">
             <div className="inline-flex items-center gap-2.5 border border-[#E32119] px-3 py-2 sm:px-3.5 sm:py-2.5">
               <span className="text-[#E32119]" aria-hidden>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                  <path
-                    d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"
-                    stroke="currentColor"
-                    strokeWidth="1.4"
-                    strokeLinecap="round"
-                  />
+                  <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
                 </svg>
               </span>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-neutral-800 sm:text-[11px] sm:tracking-[0.22em]">
-                Selected work
-              </p>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-neutral-800 sm:text-[11px] sm:tracking-[0.22em]">Selected work</p>
             </div>
 
             <div className="flex items-start gap-3 sm:gap-4">
               <div className="border border-neutral-300 px-4 py-3 text-right sm:px-5 sm:py-4">
                 <p className="font-mono text-2xl font-medium tabular-nums text-neutral-950 sm:text-3xl">
-                  {String(index + 1).padStart(2, "0")}
-                  <span className="text-base font-normal text-neutral-500 sm:text-lg">
-                    {" "}
-                    / {String(total).padStart(2, "0")}
-                  </span>
+                  <span ref={currentNumRef}>01</span>
+                  <span className="text-base font-normal text-neutral-500 sm:text-lg"> / {String(total).padStart(2, "0")}</span>
                 </p>
                 <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.28em] text-neutral-500 sm:text-[11px]">Projects</p>
               </div>
-              <button
-                type="button"
-                onClick={() => go(1)}
-                className="flex size-11 shrink-0 items-center justify-center border border-neutral-300 text-neutral-700 transition hover:border-neutral-400 hover:bg-neutral-50 hover:text-neutral-950 sm:size-12"
-                aria-label="Next project"
-              >
+              <button type="button" onClick={() => handleStepNavigation(1)} className="flex size-11 shrink-0 items-center justify-center border border-neutral-300 text-neutral-700 transition hover:border-neutral-400 hover:bg-neutral-50 hover:text-neutral-950 sm:size-12" aria-label="Next project">
                 <IconChevron dir="right" />
               </button>
-              <button
-                type="button"
-                onClick={() => go(-1)}
-                className="flex size-11 shrink-0 items-center justify-center border border-neutral-300 text-neutral-700 transition hover:border-neutral-400 hover:bg-neutral-50 hover:text-neutral-950 sm:size-12"
-                aria-label="Previous project"
-              >
+              <button type="button" onClick={() => handleStepNavigation(-1)} className="flex size-11 shrink-0 items-center justify-center border border-neutral-300 text-neutral-700 transition hover:border-neutral-400 hover:bg-neutral-50 hover:text-neutral-950 sm:size-12" aria-label="Previous project">
                 <IconChevron dir="left" />
               </button>
             </div>
           </header>
 
           <div className="relative mt-2 min-h-[min(56vh,520px)] overflow-hidden md:min-h-0">
-            <div
-              ref={trackRef}
-              className="flex will-change-transform max-md:flex-col max-md:gap-20 md:flex-row md:flex-nowrap"
-            >
+            <div ref={trackRef} className="flex will-change-transform max-md:flex-col max-md:gap-20 md:flex-row md:flex-nowrap">
               {PROJECTS.map((p, slideIndex) => (
-                <article
-                  key={p.title}
-                  data-project-slide
-                  data-slide-index={slideIndex}
-                  className={`w-full shrink-0 md:flex-[0_0_100%] md:overflow-x-hidden md:pr-1 ${
-                    horizontalActive && index !== slideIndex ? "pointer-events-none" : ""
-                  }`}
-                  {...(horizontalActive && index !== slideIndex ? { "aria-hidden": true } : {})}
-                >
+                <article key={p.title} data-project-slide data-slide-index={slideIndex} className="w-full shrink-0 md:flex-[0_0_100%] md:overflow-x-hidden md:pr-1 pointer-events-none" aria-hidden="true">
                   <ProjectSlideBody project={p} slideIndex={slideIndex} />
                 </article>
               ))}
@@ -506,14 +383,11 @@ export function SelectedWorkProjects() {
           <div className="mt-8 shrink-0 border border-neutral-200 sm:mt-6 md:mt-4">
             <div className="flex items-center justify-between gap-3 px-3 py-2.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-neutral-500 sm:px-4 sm:text-[11px]">
               <span>Start</span>
-              <span className="tabular-nums text-neutral-800">{pctLabel}%</span>
+              <span ref={progressTextRef} className="tabular-nums text-neutral-800">0%</span>
               <span>End</span>
             </div>
             <div className="h-1 w-full bg-neutral-200">
-              <div
-                className="h-full bg-[#E32119] transition-[width] duration-150 ease-out md:duration-75"
-                style={{ width: `${barWidth}%` }}
-              />
+              <div ref={progressBarRef} className="h-full bg-[#E32119] w-full scale-x-0" />
             </div>
           </div>
         </div>

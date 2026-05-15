@@ -3,7 +3,6 @@
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useState } from "react";
-
 import { TypewriterText } from "@/components/ui/TypewriterText";
 
 const AboutScrapbookThreeBackdrop = dynamic(
@@ -14,10 +13,7 @@ const AboutScrapbookThreeBackdrop = dynamic(
   { ssr: false, loading: () => null },
 );
 
-/** Golden-hour profile inside the Instagram-style card (avatar + main square). */
 const PROFILE_PHOTO = "/images/pradeep-profile.png";
-
-/** `portfolio/public/images/pradeep-headshot-left.png` → served as `/images/...`. */
 const HEADSHOT_LEFT = "/images/pradeep-headshot-left.png";
 
 const ABOUT_LEAD =
@@ -26,7 +22,6 @@ const ABOUT_LEAD =
 const ABOUT_BODY =
   "Hello, I'm Pradeep Chaudhary. I'm a full-stack developer and ML engineer with over two years of experience building end-to-end intelligent applications. I bridge the gap between complex machine learning research and functional, user-centric products. My expertise lies in architecting scalable React/Next.js frontends, robust Node.js/Python backends, and integrating custom ML models that solve real-world problems. I don't just build models — I build the infrastructure that makes them useful.";
 
-/** Short blurbs under the Instagram CTA */
 const INSTA_CAPTION_BLURB =
   "Three years of experience. 5 projects shipped across storefronts, internal tools, and analytics surfaces. Comfortable owning features end to end, with AWS, Docker, and CI/CD friendly habits baked in.";
 
@@ -38,118 +33,89 @@ function InstagramGlyph({ className }: { className?: string }) {
   );
 }
 
-/**
- * About panel (hero overlay) — headshot, “Pradeep” landmark, About copy, 3D Instagram frame.
- */
 export function HeroAboutScrapbook() {
   const [leadDone, setLeadDone] = useState(false);
 
   return (
-    <div className="pointer-events-auto relative flex w-full shrink-0 flex-col bg-white pt-[max(0.5rem,env(safe-area-inset-top))] pb-[max(2.5rem,calc(env(safe-area-inset-bottom,0px)+2rem))]">
+    /* overflow-x-hidden strictly prevents any horizontal screen wobbling during vertical scrolls */
+    <div className="pointer-events-auto relative flex w-full shrink-0 flex-col bg-white overflow-x-hidden pt-[max(0.5rem,env(safe-area-inset-top))] pb-[max(2.5rem,calc(env(safe-area-inset-bottom,0px)+2rem))]">
       <AboutScrapbookThreeBackdrop />
+      
       <div className="pointer-events-auto relative z-[1] w-full max-w-none px-5 pb-6 pt-4 sm:px-8 sm:pb-8 sm:pt-5 md:px-10 md:pb-10 md:pt-6 lg:px-12">
-        {/* Top lead — mirrors reference inset copy */}
-        <div className="max-w-[22rem] text-[12px] font-medium uppercase leading-snug tracking-[0.08em] text-neutral-700 sm:max-w-[26rem] sm:text-[13px] md:text-sm md:leading-relaxed">
-          {!leadDone ? (
+        
+        {/* Dynamic Header Box with fixed structural layout reservation */}
+        <div className="min-h-[40px] max-w-[22rem] text-[12px] font-medium uppercase leading-snug tracking-[0.08em] text-neutral-700 sm:max-w-[26rem] sm:text-[13px] md:text-sm md:leading-relaxed">
+          <span className={leadDone ? "hidden" : "inline"}>
             <TypewriterText
-              as="p"
+              as="span"
               text={ABOUT_LEAD}
-              className="inline"
-              charDelayMs={18}
+              charDelayMs={12}
               onComplete={() => setLeadDone(true)}
             />
-          ) : (
-            <p>{ABOUT_LEAD}</p>
-          )}
+          </span>
+          <p className={leadDone ? "block" : "sr-only"}>{ABOUT_LEAD}</p>
         </div>
 
-        <div
-          className={`relative mt-5 flex min-h-[1px] flex-col gap-5 sm:mt-6 sm:gap-7 lg:mt-8 lg:grid lg:min-h-[min(36vh,400px)] lg:items-start lg:gap-x-4 lg:gap-y-6 xl:gap-x-6 ${
-            leadDone
-              ? "lg:grid-cols-[minmax(11.5rem,19rem)_minmax(0,0.45fr)_minmax(0,1fr)_auto]"
-              : "lg:grid-cols-[minmax(11.5rem,19rem)_minmax(0,1.1fr)_auto]"
-          }`}
-        >
-          {/* Left — headshot (first track needs a non-zero min or fr columns can collapse it to 0 width) */}
-          <div className="relative z-[2] flex min-w-0 flex-col lg:col-start-1">
-            <div className="relative z-[1] mx-auto w-[min(100%,17.5rem)] sm:w-[min(100%,21rem)] lg:mx-0 lg:w-full lg:max-w-[19rem] motion-reduce:rotate-0">
-              <div className="-rotate-[1deg] overflow-hidden rounded-xl border border-neutral-900/95 bg-neutral-900 shadow-[0_22px_50px_-20px_rgba(0,0,0,0.45)] ring-1 ring-white/40 motion-reduce:rotate-0 lg:-rotate-[1.25deg]">
-                <div className="relative aspect-[4/5] w-full bg-neutral-900">
-                  <Image
-                    src={HEADSHOT_LEFT}
-                    alt="Pradeep Chaudhary — professional headshot"
-                    fill
-                    sizes="(max-width: 1024px) 320px, 380px"
-                    priority
-                    className="object-cover object-[center_36%] brightness-[1.02] contrast-[1.05] scale-[1.12] md:scale-[1.18] motion-reduce:scale-100 motion-reduce:object-center [transform-origin:50%_40%]"
-                  />
-                  <div
-                    className="pointer-events-none absolute inset-0 shadow-[inset_0_0_48px_rgba(0,0,0,0.14)]"
-                    aria-hidden
-                  />
-                </div>
+        {/* Locked structural grid definitions ensure columns never warp or break your width expectations */}
+        <div className="relative mt-8 grid min-h-[1px] w-full grid-cols-1 gap-8 sm:gap-10 lg:grid-cols-[minmax(14rem,19rem)_auto_1fr_max-content] lg:items-start lg:gap-x-6">
+          
+          {/* Column 1: Headshot Layout Box */}
+          <div className="relative z-[2] w-full max-w-[19rem] justify-self-center lg:justify-self-start">
+            <div className="overflow-hidden rounded-xl border border-neutral-900 bg-neutral-900 shadow-[0_22px_50px_-20px_rgba(0,0,0,0.45)] transform -rotate-[1deg] lg:-rotate-[1.25deg]">
+              <div className="relative aspect-[4/5] w-full">
+                <Image
+                  src={HEADSHOT_LEFT}
+                  alt="Pradeep Chaudhary — professional portrait"
+                  fill
+                  sizes="(max-width: 1024px) 280px, 320px"
+                  priority
+                  className="object-cover object-center"
+                />
               </div>
             </div>
           </div>
 
-          {/* Landmark — Pradeep (typography between photo and About) */}
-          {leadDone ? (
-            <div className="pointer-events-none flex min-h-0 min-w-0 select-none items-center justify-center lg:col-start-2 lg:self-stretch">
-              <p
-                className="text-center font-black uppercase leading-none tracking-[-0.06em] text-neutral-200 max-lg:text-[clamp(2.75rem,12vw,4.5rem)] lg:text-[clamp(3.25rem,11vh,6.5rem)] lg:[writing-mode:vertical-rl]"
-                aria-hidden
-              >
-                Pradeep
-              </p>
-            </div>
-          ) : null}
-
-          {/* Center — About me */}
-          {leadDone ? (
-            <aside className="relative z-[3] mx-auto min-w-0 w-full max-w-lg border-y border-neutral-200/90 bg-white/90 px-4 py-5 text-left shadow-sm backdrop-blur-[2px] sm:max-w-xl sm:rounded-xl sm:border sm:px-6 sm:py-6 lg:col-start-3 lg:mx-0 lg:mt-0 lg:max-w-none lg:border lg:border-neutral-200/80 lg:bg-white/95 lg:px-5 lg:py-5 lg:shadow-md xl:px-6 xl:py-6">
-              <p className="text-[0.625rem] font-semibold uppercase tracking-[0.22em] text-neutral-500 sm:text-[0.6875rem]">About</p>
-              <h3 className="mt-1.5 text-xl font-black uppercase tracking-tight text-black sm:mt-2 sm:text-[1.5rem] sm:leading-tight">
-                About me
-              </h3>
-              <p className="mt-3 text-[0.875rem] leading-[1.55] text-neutral-800 text-pretty sm:mt-4 sm:text-[0.9375rem] sm:leading-[1.62]">
-                {ABOUT_BODY}
-              </p>
-            </aside>
-          ) : null}
-
-          {/* Right — Instagram */}
-          <div
-            className={`mx-auto flex w-full max-w-[16rem] shrink-0 flex-col items-center gap-3 sm:max-w-[17.5rem] sm:gap-4 lg:mx-0 lg:mt-0 lg:justify-self-end ${
-              leadDone ? "lg:col-start-4" : "lg:col-start-3"
+          {/* Column 2: Vertical Decorative Typography Signature */}
+          <div 
+            className={`pointer-events-none flex select-none items-center justify-center lg:self-stretch transition-opacity duration-500 ${
+              leadDone ? "opacity-100" : "opacity-10 lg:opacity-20"
             }`}
-            style={{ perspective: "1100px" }}
           >
-            <div
-              className="relative w-full origin-center rounded-[1.75rem] border-[3px] border-black bg-white p-2 shadow-[0_28px_50px_-12px_rgba(0,0,0,0.35)] motion-reduce:transform-none lg:[transform:rotateX(10deg)_rotateY(-22deg)_rotateZ(-1deg)]"
-            >
+            <p className="text-center font-black uppercase leading-none tracking-[-0.06em] text-neutral-200 text-[clamp(2.75rem,10vw,4.5rem)] lg:text-[clamp(3.25rem,10vh,5.5rem)] lg:[writing-mode:vertical-rl]" aria-hidden="true">
+              Pradeep
+            </p>
+          </div>
+
+          {/* Column 3: Main Profile Text Description (Fades inside structural footprint safely) */}
+          <aside 
+            className={`relative z-[3] w-full bg-white px-4 py-5 border-y border-neutral-200 transition-all duration-500 sm:rounded-xl sm:border sm:px-6 sm:shadow-md lg:px-5 ${
+              leadDone ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"
+            }`}
+          >
+            <p className="text-[0.625rem] font-semibold uppercase tracking-[0.22em] text-neutral-500 sm:text-[0.6875rem]">About</p>
+            <h3 className="mt-1.5 text-xl font-black uppercase tracking-tight text-black sm:text-[1.5rem]">
+              About me
+            </h3>
+            <p className="mt-3 text-[0.875rem] leading-[1.65] text-neutral-800 text-pretty">
+              {ABOUT_BODY}
+            </p>
+          </aside>
+
+          {/* Column 4: 3D Instagram Perspective Card Asset */}
+          <div className="mx-auto flex w-full max-w-[16rem] shrink-0 flex-col items-center gap-4 lg:mx-0" style={{ perspective: "1100px" }}>
+            {/* Margins protect the boundaries from side leaks caused by horizontal 3D swinging lines */}
+            <div className="relative w-full rounded-[1.75rem] border-[3px] border-black bg-white p-2 shadow-[0_28px_50px_-12px_rgba(0,0,0,0.35)] transform lg:mx-2 lg:[transform:rotateX(10deg)_rotateY(-18deg)_rotateZ(-1deg)]">
               <div className="flex items-center gap-2 border-b border-neutral-200 px-2 py-2">
-                <div className="h-8 w-8 shrink-0 overflow-hidden rounded-full border border-black">
-                  <Image
-                    src={PROFILE_PHOTO}
-                    alt=""
-                    width={96}
-                    height={96}
-                    className="h-full w-full object-cover object-top"
-                  />
+                <div className="h-8 w-8 overflow-hidden rounded-full border border-black relative">
+                  <Image src={PROFILE_PHOTO} alt="" fill className="object-cover" />
                 </div>
-                <div className="min-w-0">
-                  <p className="truncate text-xs font-bold text-black">pradeep__chy</p>
+                <div>
+                  <p className="text-xs font-bold text-black">pradeep__chy</p>
                   <p className="text-[10px] uppercase tracking-wider text-neutral-500">Portfolio</p>
                 </div>
               </div>
-              <div className="overflow-hidden rounded-[1.1rem]">
-                <Image
-                  src={PROFILE_PHOTO}
-                  alt="Pradeep profile"
-                  width={720}
-                  height={720}
-                  className="aspect-square w-full object-cover object-[50%_20%]"
-                />
+              <div className="overflow-hidden rounded-[1.1rem] relative aspect-square w-full">
+                <Image src={PROFILE_PHOTO} alt="Pradeep Profile Feed Preview" fill className="object-cover" />
               </div>
             </div>
 
@@ -157,36 +123,30 @@ export function HeroAboutScrapbook() {
               href="https://www.instagram.com/pradeep__chy"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2.5 rounded-full bg-black px-6 py-3 text-sm font-semibold uppercase tracking-wide text-white shadow-lg transition hover:bg-neutral-800"
+              className="inline-flex items-center gap-2.5 rounded-full bg-black px-6 py-3 text-sm font-semibold uppercase tracking-wide text-white shadow-lg hover:bg-neutral-800 transition-colors"
             >
               <InstagramGlyph />
               <span>@pradeep__chy</span>
             </a>
-            <div className="w-full max-w-[16rem] text-center text-[12px] font-medium leading-snug text-neutral-600 sm:max-w-[17.5rem] sm:text-[13px] sm:leading-[1.6]">
+
+            <div className="w-full text-center text-[12px] font-medium leading-snug text-neutral-600 min-h-[50px]">
               {leadDone ? (
-                <TypewriterText
-                  as="p"
-                  text={INSTA_CAPTION_BLURB}
-                  className="block text-pretty"
-                  charDelayMs={12}
-                  startDelayMs={120}
-                />
-              ) : null}
+                <TypewriterText id="insta-blurb" as="p" text={INSTA_CAPTION_BLURB} className="text-pretty" charDelayMs={8} />
+              ) : (
+                <p className="sr-only">{INSTA_CAPTION_BLURB}</p>
+              )}
             </div>
           </div>
 
-          {/* Landmark — oversized section anchor */}
-          <div
-            className={`pointer-events-none select-none lg:row-start-2 ${leadDone ? "lg:col-span-4" : "lg:col-span-3"}`}
-          >
-            <p
-              className="mt-4 text-center text-[clamp(2rem,11vw,6rem)] font-black uppercase leading-[0.85] tracking-[-0.05em] text-neutral-300 sm:mt-5 sm:text-[clamp(2.5rem,12vw,8rem)] lg:mt-3 lg:pb-1 lg:text-[clamp(3rem,10vh,7rem)]"
-              aria-hidden
-            >
-              About
-            </p>
-          </div>
         </div>
+
+        {/* Global Bottom Section Label Backdrop Anchor */}
+        <div className="pointer-events-none select-none w-full mt-6">
+          <p className="text-center text-[clamp(3rem,11vw,6.5rem)] font-black uppercase leading-none tracking-[-0.05em] text-neutral-300/60" aria-hidden="true">
+            About
+          </p>
+        </div>
+
       </div>
     </div>
   );

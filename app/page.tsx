@@ -8,7 +8,7 @@ import { StackCard } from "@/components/layout/StackCard";
 
 export default function Home() {
   return (
-    <main className="min-w-0 bg-[#050505]">
+    <main className="min-w-0  bg-[#050505]">
       <Hero />
 
       <StackCard

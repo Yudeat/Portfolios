@@ -1,15 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
-
-/**
- * Experience stack — Skiper 16–style sticky cards + scroll-scrubbed scale,
- * implemented with GSAP ScrollTrigger (Lenis-compatible site scroll).
- */
 
 const STATS = [
   { value: "1+", label: "Years experience" },
@@ -17,7 +12,6 @@ const STATS = [
   { value: "3", label: "Roles" },
 ] as const;
 
-/** Newest first — matches LinkedIn experience order. */
 const ROLES = [
   {
     index: "01",
@@ -67,27 +61,10 @@ const ROLES = [
   },
 ] as const;
 
-/** Maps scroll progress 0→1 to scale, mirroring Framer `useTransform(..., { clamp: true })`. */
-function cardScale(progress: number, rangeStart: number, rangeEnd: number, targetScale: number) {
-  if (rangeEnd - rangeStart < 1e-6) {
-    return progress >= rangeEnd ? targetScale : 1;
-  }
-  if (progress <= rangeStart) return 1;
-  if (progress >= rangeEnd) return targetScale;
-  const t = (progress - rangeStart) / (rangeEnd - rangeStart);
-  return 1 + (targetScale - 1) * t;
-}
-
 function IconBuilding({ className }: { className?: string }) {
   return (
     <svg className={className} width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path
-        d="M4 20V9l8-4 8 4v11M9 20v-5h6v5"
-        stroke="currentColor"
-        strokeWidth="1.35"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+      <path d="M4 20V9l8-4 8 4v11M9 20v-5h6v5" stroke="currentColor" strokeWidth="1.35" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -95,45 +72,19 @@ function IconBuilding({ className }: { className?: string }) {
 function IconPin({ className }: { className?: string }) {
   return (
     <svg className={className} width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path
-        d="M12 21s7-4.35 7-10a7 7 0 1 0-14 0c0 5.65 7 10 7 10Z"
-        stroke="currentColor"
-        strokeWidth="1.35"
-        strokeLinejoin="round"
-      />
+      <path d="M12 21s7-4.35 7-10a7 7 0 1 0-14 0c0 5.65 7 10 7 10Z" stroke="currentColor" strokeWidth="1.35" strokeLinejoin="round" />
       <circle cx="12" cy="11" r="2" stroke="currentColor" strokeWidth="1.35" />
     </svg>
   );
 }
 
-function StickyExperienceCard({
-  i,
-  entry,
-  progress,
-  range,
-  targetScale,
-}: {
-  i: number;
-  entry: (typeof ROLES)[number];
-  progress: number;
-  range: [number, number];
-  targetScale: number;
-}) {
-  const scale = cardScale(progress, range[0], range[1], targetScale);
-  const preview = entry.achievements.slice(0, 2);
-
+function StickyExperienceCard({ i, entry }: { i: number; entry: (typeof ROLES)[number] }) {
   return (
     <div
-      style={{
-        transform: `scale(${scale})`,
-        top: `calc(-5vh + ${i * 26 + 320}px)`,
-      }}
-      className="relative -top-1/4 flex h-[min(62vh,500px)] w-[min(96vw,760px)] max-w-full origin-top flex-col overflow-hidden rounded-[2.25rem] border border-white/12 bg-[#0a0a0a] shadow-[0_48px_120px_-32px_rgba(0,0,0,0.9)] will-change-transform sm:h-[min(66vh,560px)] sm:w-[min(94vw,880px)] sm:rounded-[2.5rem] lg:h-[min(70vh,620px)] lg:w-[min(92vw,1000px)] lg:rounded-[2.75rem]"
+      data-card-index={i}
+      className="card-element relative flex h-[min(62vh,500px)] w-[min(96vw,760px)] max-w-full origin-top flex-col overflow-hidden rounded-[2.25rem] border border-white/12 bg-[#0a0a0a] shadow-[0_48px_120px_-32px_rgba(0,0,0,0.9)] will-change-transform sm:h-[min(66vh,560px)] sm:w-[min(94vw,880px)] sm:rounded-[2.5rem] lg:h-[min(70vh,620px)] lg:w-[min(92vw,1000px)] lg:rounded-[2.75rem]"
     >
-      <span
-        className="pointer-events-none absolute right-4 top-3 select-none font-hero-serif text-[clamp(3.5rem,18vw,7rem)] font-semibold leading-none text-white/[0.08] sm:right-6 sm:top-4"
-        aria-hidden
-      >
+      <span className="pointer-events-none absolute right-4 top-3 select-none font-hero-serif text-[clamp(3.5rem,18vw,7rem)] font-semibold leading-none text-white/[0.08] sm:right-6 sm:top-4" aria-hidden>
         {entry.index}
       </span>
 
@@ -161,25 +112,22 @@ function StickyExperienceCard({
         <p className="mt-3.5 line-clamp-3 text-pretty text-sm leading-relaxed text-white/65 sm:mt-4 sm:text-base lg:line-clamp-4">
           {entry.description}
         </p>
+        
+        {/* Render all points to maintain DOM access; let CSS handle layout limits */}
         <ul className="mt-3 min-h-0 flex-1 space-y-2 sm:space-y-2.5">
-          {preview.map((line) => (
+          {entry.achievements.map((line) => (
             <li key={line} className="flex gap-2.5 text-sm leading-relaxed text-white/78 sm:text-base">
-              <span
-                className="mt-0.5 inline-flex h-3.5 w-3.5 shrink-0 items-center justify-center border border-white/35 sm:h-4 sm:w-4"
-                aria-hidden
-              >
+              <span className="mt-0.5 inline-flex h-3.5 w-3.5 shrink-0 items-center justify-center border border-white/35 sm:h-4 sm:w-4" aria-hidden>
                 <span className="text-[9px] text-white/75 sm:text-[10px]">+</span>
               </span>
               <span className="line-clamp-2 sm:line-clamp-3">{line}</span>
             </li>
           ))}
         </ul>
+
         <div className="mt-auto flex flex-wrap gap-1.5 border-t border-white/10 pt-3 sm:gap-2 sm:pt-4">
           {entry.tags.slice(0, 5).map((tag) => (
-            <span
-              key={tag}
-              className="border border-white/22 px-2 py-0.5 font-mono text-[0.5rem] font-semibold uppercase tracking-[0.14em] text-white/72 sm:text-[0.55rem]"
-            >
+            <span key={tag} className="border border-white/22 px-2 py-0.5 font-mono text-[0.5rem] font-semibold uppercase tracking-[0.14em] text-white/72 sm:text-[0.55rem]">
               {tag}
             </span>
           ))}
@@ -190,57 +138,55 @@ function StickyExperienceCard({
 }
 
 export function ExperienceSection() {
-  const stackRef = useRef<HTMLDivElement>(null);
-  const [progress, setProgress] = useState(0);
-  const total = ROLES.length;
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const el = stackRef.current;
-    if (!el) return;
+    const container = containerRef.current;
+    if (!container) return;
 
-    const st = ScrollTrigger.create({
-      trigger: el,
-      start: "top top",
-      end: "bottom bottom",
-      scrub: 0.45,
-      onUpdate: (self) => setProgress(self.progress),
-    });
+    const cards = container.querySelectorAll(".card-element");
+    const totalCards = cards.length;
+    const ctx = gsap.context(() => {
+      cards.forEach((card, index) => {
+        // Skip animating the last card as it sits at the top of the final view
+        if (index === totalCards - 1) return;
 
-    queueMicrotask(() => ScrollTrigger.refresh());
+        const targetScale = Math.max(0.65, 1 - (totalCards - index - 1) * 0.06);
 
-    return () => {
-      st.kill();
-    };
+        gsap.to(card, {
+          scale: targetScale,
+          scrollTrigger: {
+            trigger: card,
+            // Starts shrinking when the next card's container element scrolls into view
+            start: "top 10%",
+            end: "bottom 10%",
+            scrub: true,
+            invalidateOnRefresh: true,
+          },
+        });
+      });
+    }, container);
+
+    return () => ctx.revert();
   }, []);
 
   return (
-    <section className="relative bg-white text-[#101116]" aria-labelledby="experience-heading">
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.35] [background-image:linear-gradient(to_right,rgba(0,0,0,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.04)_1px,transparent_1px)] [background-size:40px_40px]"
-        aria-hidden
-      />
+    <section ref={containerRef} className="relative bg-white text-[#101116]" aria-labelledby="experience-heading">
+      <div className="pointer-events-none absolute inset-0 opacity-[0.35] [background-image:linear-gradient(to_right,rgba(0,0,0,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.04)_1px,transparent_1px)] [background-size:40px_40px]" aria-hidden />
 
       <div className="relative z-[1] mx-auto w-full max-w-[1400px] px-4 pb-4 pt-6 sm:px-8 sm:pb-5 sm:pt-7 lg:px-12">
         <div className="mx-auto flex w-full max-w-3xl flex-col items-center">
           <div className="flex w-full items-center justify-center gap-4 sm:gap-6">
             <span className="h-px min-w-[2.5rem] flex-1 bg-[#101116]/25 sm:min-w-[4rem]" aria-hidden />
-            <p className="shrink-0 font-mono text-[0.62rem] font-semibold uppercase tracking-[0.35em] text-[#101116]/85">
-              Career path
-            </p>
+            <p className="shrink-0 font-mono text-[0.62rem] font-semibold uppercase tracking-[0.35em] text-[#101116]/85">Career path</p>
             <span className="h-px min-w-[2.5rem] flex-1 bg-[#101116]/25 sm:min-w-[4rem]" aria-hidden />
           </div>
 
           <div className="relative mt-3 flex items-start justify-center gap-3 sm:mt-4 sm:gap-4">
-            <span
-              className="mt-1.5 inline-flex h-3.5 w-3.5 shrink-0 items-center justify-center border border-[#101116]/75 sm:mt-2 sm:h-4 sm:w-4"
-              aria-hidden
-            >
+            <span className="mt-1.5 inline-flex h-3.5 w-3.5 shrink-0 items-center justify-center border border-[#101116]/75 sm:mt-2 sm:h-4 sm:w-4" aria-hidden>
               <span className="h-1 w-1 rounded-full bg-[#101116] sm:h-1.5 sm:w-1.5" />
             </span>
-            <h2
-              id="experience-heading"
-              className="font-hero-serif text-[clamp(2.5rem,8vw,4.5rem)] font-semibold uppercase leading-[0.95] tracking-[0.02em]"
-            >
+            <h2 id="experience-heading" className="font-hero-serif text-[clamp(2.5rem,8vw,4.5rem)] font-semibold uppercase leading-[0.95] tracking-[0.02em]">
               Experience
             </h2>
           </div>
@@ -271,26 +217,17 @@ export function ExperienceSection() {
         </div>
       </div>
 
-      {/* Skiper-style scroll track: stacked `sticky top-0` rows */}
-      <div
-        ref={stackRef}
-        className="relative mx-auto flex w-full max-w-[1400px] flex-col items-center justify-center overflow-visible pb-[12vh] pt-[2vh] sm:pb-[16vh] sm:pt-[3vh] md:pb-[18vh] md:pt-[4vh]"
-      >
-        {ROLES.map((entry, i) => {
-          const targetScale = Math.max(0.5, 1 - (total - i - 1) * 0.1);
-          const range: [number, number] =
-            total > 1 ? [i / (total - 1), 1] : [0, 1];
-
-          return (
-            <div
-              key={entry.index}
-              className="sticky top-0 flex min-h-[62svh] w-full items-center justify-center py-3 sm:min-h-[66svh] sm:py-4 lg:min-h-[70svh]"
-              style={{ zIndex: 10 + i }}
-            >
-              <StickyExperienceCard i={i} entry={entry} progress={progress} range={range} targetScale={targetScale} />
-            </div>
-          );
-        })}
+      {/* Stacked CSS Layout Container */}
+      <div className="relative mx-auto flex w-full max-w-[1400px] flex-col items-center overflow-visible pb-[12vh] pt-[4vh] sm:pb-[16vh] md:pb-[18vh]">
+        {ROLES.map((entry, i) => (
+          <div
+            key={entry.index}
+            className="sticky top-20 flex min-h-[60svh] w-full items-center justify-center py-6"
+            style={{ zIndex: 10 + i }}
+          >
+            <StickyExperienceCard i={i} entry={entry} />
+          </div>
+        ))}
       </div>
     </section>
   );
