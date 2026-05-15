@@ -42,7 +42,7 @@ export default function Home() {
       </StackCard>
 
       {/* Inner section uses its own sticky card stack — outer shell must stay `relative` or nested stickies break. */}
-      <StackCard id="experience" stackIndex={4} sticky={false} className="scroll-mt-20 bg-black">
+      <StackCard id="experience" stackIndex={4} sticky={false} className="scroll-mt-20 bg-white">
         <ExperienceSection />
       </StackCard>
 

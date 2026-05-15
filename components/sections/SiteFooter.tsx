@@ -91,7 +91,7 @@ export function SiteFooter() {
 
             <div>
               <h3 className="text-[clamp(1.35rem,2vw,2rem)] font-medium tracking-[-0.04em] text-[#101116]">
-                Send us a message
+                Send me a message
               </h3>
               <form className="mt-6 grid gap-5" aria-label="Contact form">
                 <div className="grid gap-5 sm:grid-cols-2">
