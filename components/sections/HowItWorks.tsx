@@ -52,7 +52,7 @@ const STEPS = [
 function StepFrame({ accent, children }: { accent: boolean; children: ReactNode }) {
   const line = accent ? "border-emerald-700/35" : "border-[#101116]/15";
   return (
-    <div className="relative px-6 py-12 sm:px-8 sm:py-14 bg-transparent transition-colors duration-200">
+    <div className="relative bg-transparent px-3 py-6 transition-colors duration-200 sm:px-8 sm:py-14">
       <span className={`pointer-events-none absolute left-0 top-0 h-6 w-6 border-l border-t ${line}`} aria-hidden />
       <span className={`pointer-events-none absolute right-0 top-0 h-6 w-6 border-r border-t ${line}`} aria-hidden />
       <span className={`pointer-events-none absolute bottom-0 left-0 h-6 w-6 border-b border-l ${line}`} aria-hidden />
@@ -83,22 +83,22 @@ export function HowItWorks() {
         </p>
       </div>
 
-      <div className="mx-auto mt-14 grid w-full max-w-7xl gap-8 sm:mt-16 sm:grid-cols-2 lg:mt-20 lg:grid-cols-4 lg:gap-6 xl:gap-8">
+      <div className="mx-auto mt-14 grid w-full max-w-7xl grid-cols-2 gap-3 sm:mt-16 sm:gap-8 lg:mt-20 lg:grid-cols-4 lg:gap-6 xl:gap-8">
         {STEPS.map((step) => (
           <StepFrame key={step.id} accent={step.accent}>
             <div className="flex h-full flex-col items-center text-center">
-              <div className="mb-6 flex h-12 items-center justify-center" aria-hidden="true">
+              <div className="mb-3 flex h-9 items-center justify-center sm:mb-6 sm:h-12 [&_svg]:size-9 sm:[&_svg]:size-11" aria-hidden="true">
                 {step.icon}
               </div>
               <h3
-                className={`font-sans text-xs font-bold uppercase tracking-[0.2em] sm:text-sm ${
+                className={`font-sans text-[0.625rem] font-bold uppercase tracking-[0.12em] sm:text-xs sm:tracking-[0.2em] ${
                   step.accent ? "text-emerald-700" : "text-[#101116]"
                 }`}
               >
                 {step.title}
               </h3>
               <p
-                className={`mt-4 max-w-[18rem] text-pretty text-xs leading-[1.65] sm:text-[0.875rem] ${
+                className={`mt-2 max-w-none text-pretty text-[0.65rem] leading-snug sm:mt-4 sm:max-w-[18rem] sm:text-xs sm:leading-[1.65] md:text-[0.875rem] ${
                   step.accent ? "text-neutral-800" : "text-[#101116]/70"
                 }`}
               >
